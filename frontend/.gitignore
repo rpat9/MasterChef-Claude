@@ -26,3 +26,6 @@ claudeAPI.env
 *.njsproj
 *.sln
 *.sw?
+.dockerignore
+dockerfile
+docker-compose.yml

@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+* {
+    box-sizing: border-box;
+}
+
+h1 {
+    font-size: 36px;
+}
+
+:root {
+    --primary-button: #FF9800;
+    --primary-button-hover: #df8600;
+}
+
+@layer components {
+
+    .btn-primary {
+      @apply text-white font-semibold bg-[var(--primary-button)] cursor-pointer border border-black px-2 h-10 shadow-md rounded hover:bg-[var(--primary-button-hover)] hover:scale-105 transition duration-300 ease-in-out
+    }
+    
+}
+
+@layer utilities {
+
+    .fade-in {
+      animation: fade-in 0.6s ease-out both;
+    }
+
+}
