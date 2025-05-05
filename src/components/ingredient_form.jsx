@@ -73,7 +73,7 @@ export default function IngredientForm() {
                     className="grow border rounded-sm border-solid outline-[1px] border-black px-2 h-10 shadow-md shadow-amber-50"
                 />
 
-                <button type="submit" className="btn-primary">+ Add Ingredient</button>
+                <button type="submit" className="text-white font-semibold bg-orange-500 cursor-pointer border border-black px-2 h-10 shadow-md rounded hover:scale-105 transition duration-300 ease-in-out">+ Add Ingredient</button>
 
             </form>
 
