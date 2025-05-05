@@ -1,35 +1,25 @@
-import Anthropic from "@anthropic-ai/sdk";
+// Updated to call backend API instead of Claude directly
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api";
 
-const CLAUDE_API_KEY = import.meta.env.VITE_CHEF_CLAUDE_API_KEY;
+export async function getRecipeFromClaude(ingredientsArr) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/recipes/generate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ingredients: ingredientsArr }),
+    });
 
-const systemPrompt = `
-You are an assistant that receives a list of ingredients that a user has and suggests a recipe they could make with some or all of those ingredients. You don't need to use every ingredient they mention in your recipe. The recipe can include additional ingredients they didn't mention, but try not to include too many extra ingredients. Format your response in markdown to make it easier to render to a web page
-`;
-
-const anthropic = new Anthropic({
-    apiKey: CLAUDE_API_KEY,
-    dangerouslyAllowBrowser: true,
-});
-
-export async function getRecipeFromClaude(ingredientsArr){
-
-    const ingredientsString = ingredientsArr.join(", ");
-
-    try{
-        const response = await anthropic.messages.create({
-            model: "claude-3-5-sonnet-20241022",
-            max_tokens: 1024,
-            system: systemPrompt,
-            messages: [{ role: "user", content: `I have theseIngredients: ${ingredientsString}. Please give me a recipe you'd recommend I make!` }],
-        });
-
-        if (response.content && response.content[0] && response.content[0].text) {
-            return response.content[0].text;
-        } else{
-            throw new Error("Unexpected response from Claude API");
-        }
-    } catch (error) {
-        console.error("Error fetching recipe from Claude API:", error);
-        throw error;
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Failed to fetch recipe');
     }
+
+    const data = await response.json();
+    return data.recipe;
+  } catch (error) {
+    console.error("Error fetching recipe from backend:", error);
+    throw error;
+  }
 }

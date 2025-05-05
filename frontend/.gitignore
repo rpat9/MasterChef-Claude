@@ -27,5 +27,3 @@ claudeAPI.env
 *.sln
 *.sw?
 .dockerignore
-dockerfile
-docker-compose.yml
