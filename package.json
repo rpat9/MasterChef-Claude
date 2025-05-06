@@ -13,6 +13,7 @@
     "@anthropic-ai/sdk": "^0.40.0",
     "@tailwindcss/vite": "^4.1.4",
     "firebase": "^11.6.1",
+    "lucide-react": "^0.507.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-markdown": "^8.0.6",
