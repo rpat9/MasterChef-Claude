@@ -10,18 +10,18 @@ h1 {
 }
 
 :root {
-    /* Light Mode */
-    --color-primary: #A44A3F;           /* Chestnut (primary action) */
-    --color-primary-dark: #C7695E;      /* Lighter Chestnut */
-    --color-secondary: #373F51;         /* Charcoal (headings, accents) */
-    --color-accent: #8E94F2;            /* Tropical Indigo (buttons, highlights) */
-    --color-bg: #EEF0EB;                /* Alabaster (background) */
-    --color-text: #0B0B0A;              /* Night (text) */
-    --color-text-secondary: #5A5A5A;    /* Gray-600 (subdued text) */
-    --card-bg: #FFFFFF;                 /* Pure white for cards */
-    --button-text-color: #FFFFFF;       /* White text on buttons */
-    --button-hover-primary: #8A3A31;    /* Darker Chestnut */
-    --button-hover-accent: #7B82D9;     /* Darker Tropical Indigo */
+    /* Modern Bistro Palette - Light Mode */
+    --color-primary: #9C2C2C;         /* Bordeaux red */
+    --color-primary-dark: #7A2222;    /* Deeper red */
+    --color-secondary: #283618;       /* Forest green */
+    --color-accent: #FFBA08;          /* Golden yellow */
+    --color-bg: #F8F9FA;              /* Paper white */
+    --color-text: #212529;            /* Rich black */
+    --color-text-secondary: #6C757D;  /* Steel gray */
+    --card-bg: #FFFFFF;               /* Pure white for cards */
+    --button-text-color: #FFFFFF;     /* White text on buttons */
+    --button-hover-primary: #7A2222;  /* Deeper red */
+    --button-hover-accent: #E0A700;   /* Darker golden yellow */
 }
 
 body {
@@ -33,22 +33,22 @@ body {
 
 /* Dark Mode */
 .dark body{
-    --color-primary: #C7695E;        /* Lighter Chestnut */
-    --color-secondary: #8E94F2;      /* Tropical Indigo becomes secondary */
-    --color-accent: #A44A3F;         /* Chestnut becomes accent */
-    --color-bg: #1A1A1A;             /* Softened Night (easier on eyes) */
-    --color-text: #EEF0EB;           /* Alabaster for text */
-    --color-text-secondary: #B0B0B0; /* Light gray */
-    --card-bg: #252525;              /* Dark gray cards */
-    --button-text-color: #0B0B0A;    /* Night text on buttons */
-    --button-hover-primary: #D17A6F; /* Lighter Chestnut */
-    --button-hover-accent: #9CA1E6;  /* Lighter Tropical Indigo */
+    --color-primary: #BC3F3F;         /* Lighter Bordeaux red */
+    --color-secondary: #FFBA08;       /* Golden yellow becomes secondary */
+    --color-accent: #9C2C2C;          /* Bordeaux red becomes accent */
+    --color-bg: #1A1A1A;              /* Softened Night (easier on eyes) */
+    --color-text: #F8F9FA;            /* Paper white for text */
+    --color-text-secondary: #B0B0B0;  /* Light gray */
+    --card-bg: #252525;               /* Dark gray cards */
+    --button-text-color: #212529;     /* Rich black text on buttons */
+    --button-hover-primary: #CE4F4F;  /* Lighter Bordeaux red */
+    --button-hover-accent: #E0A700;   /* Darker golden yellow */
     background-color: var(--color-bg);
     color: var(--color-text);
   }
   
   .dark .btn-primary:hover {
-    --button-hover-color: #AFAECE;
+    --button-hover-color: #CE4F4F;
     background-color: var(--button-hover-primary);
   }
 
