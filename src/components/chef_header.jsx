@@ -53,7 +53,7 @@ export default function ChefHeader(){
                 {user ? (
                     <div className="flex items-center gap-4">
 
-                        <span className="text-[var(--color-secondary)]">
+                        <span className="text-[var(--color-secondary)] ml-10">
                             Hello, {user.email?.split("@")[0] || "Chef"}
                         </span>
 

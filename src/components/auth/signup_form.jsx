@@ -2,11 +2,11 @@ import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../services/firebase";
 
-export default function SignUpForm() {
+export default function SignUpForm({ onClose, onSwitchMode }) {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [confimedPassword, setConfirmedPassword] = useState("");
+    const [confirmedPassword, setConfirmedPassword] = useState("");
     const [error, setError] = useState("");
 
     const handleSignup = async(e) => {
@@ -15,14 +15,14 @@ export default function SignUpForm() {
 
         setError("");
 
-        if (password !== confimedPassword) {
+        if (password !== confirmedPassword) {
             setError("Passwords do not match");
             return;
         }
 
         try{
             await createUserWithEmailAndPassword(auth, email, password);
-            onclose();
+            onClose();
         } catch (error) {
             setError(error.message);
         }
@@ -77,7 +77,7 @@ export default function SignUpForm() {
                     type="password"
                     placeholder="confirm password"
                     className="w-full border rounded-sm border-solid outline-[1px] border-[var(--color-text-secondary)] px-3 py-2"
-                    value={confimedPassword}
+                    value={confirmedPassword}
                     onChange={(e) => setConfirmedPassword(e.target.value)}
                     required
                 />

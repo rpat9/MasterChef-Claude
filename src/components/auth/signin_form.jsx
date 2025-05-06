@@ -2,19 +2,19 @@ import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../services/firebase";
 
-export default function SignInForm() {
+export default function SignInForm({ onClose }) {
     
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
 
-    const handleLogin = async(e) => {
+    const handleSignIn = async(e) => {
         e.preventDefault();
         setError("");
 
         try{
             await signInWithEmailAndPassword(auth, email, password);
-            onclose();
+            onClose();
         } catch (error) {
             setError(error.message);
         }
