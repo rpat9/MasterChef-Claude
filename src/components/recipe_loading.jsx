@@ -26,30 +26,30 @@ export default function RecipeLoading() {
         
         const tipTimer = setInterval(() => {
           setLoadingTip(cookingTips[Math.floor(Math.random() * cookingTips.length)]);
-        }, 4000);
+        }, 2000);
         
         return () => clearInterval(tipTimer);
       }, []);
 
       return (
-        <div className="flex flex-col justify-center items-center my-8 max-w-3xl mx-auto">
-            <div className="flex items-center mb-4">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
-                    <span className="ml-3 text-lg font-medium">
+        <div className="loading-container">
+            <div className="loading-spinner-container">
+                <div className="loading-spinner"></div>
+                    <span className="loading-message">
                     {loadingMessages[loadingStage - 1]}
                     </span>
             </div>
       
-            <div className="w-full bg-gray-200 rounded-full h-2 mb-6">
+            <div className="loading-progress-track">
                 <div 
-                className="bg-orange-500 h-2 rounded-full transition-all duration-700 ease-out" 
+                className="loading-progress-fill" 
                 style={{ width: `${loadingStage * 25}%` }}
                 ></div>
             </div>
       
-            <div className="mt-2 p-4 bg-amber-50 border border-amber-100 rounded-lg text-center">
-                <p className="text-sm text-gray-700 font-medium mb-1">Chef's Tip While You Wait:</p>
-                <p className="text-sm italic">{loadingTip}</p>
+            <div className="chef-tip-container">
+                <p className="chef-tip-label">Chef's Tip While You Wait:</p>
+                <p className="chef-tip-text">{loadingTip}</p>
             </div>
         </div>
       )

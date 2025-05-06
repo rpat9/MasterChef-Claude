@@ -2,7 +2,7 @@ import { useState } from "react";
 import IngredientList from "./ingredient_list.jsx";
 import ClaudeRecipe from "./claude_recipe.jsx";
 import RecipeLoading from "./recipe_loading.jsx";
-import { getRecipeFromClaude } from "../../claudeService.js";
+import { getRecipeFromClaude } from "../services/claudeService.js";
 
 export default function IngredientForm() {
 
@@ -58,8 +58,8 @@ export default function IngredientForm() {
 
             {ingredients.length === 0 && !recipe && (
                 <div className="max-w-3xl mx-auto mb-6 text-center">
-                    <h2 className="text-xl font-semibold mb-2">Create your perfect recipe with MasterChef Claude</h2>
-                    <p className="text-gray-600">Add at least 5 ingredients to generate a delicious recipe tailored to what you have available.</p>
+                    <h2 className="text-xl text-[var(--color-primary)]">Create your perfect recipe with MasterChef Claude</h2>
+                    <p className="text-[var(--color-secondary)]">Add at least 5 ingredients to generate a delicious recipe tailored to what you have available.</p>
                 </div>
             )}
 
@@ -73,7 +73,7 @@ export default function IngredientForm() {
                     className="grow border rounded-sm border-solid outline-[1px] border-black px-2 h-10 shadow-md shadow-amber-50"
                 />
 
-                <button type="submit" className="text-white font-semibold bg-orange-500 cursor-pointer border border-black px-2 h-10 shadow-md rounded hover:scale-105 transition duration-300 ease-in-out">+ Add Ingredient</button>
+                <button type="submit" className="btn-primary btn-hover">+ Add Ingredient</button>
 
             </form>
 

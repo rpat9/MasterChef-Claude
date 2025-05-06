@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 @import "tailwindcss";
 
 * {
@@ -6,4 +7,157 @@
 
 h1 {
     font-size: 36px;
+}
+
+:root {
+    /* Light Mode */
+    --color-primary: #A44A3F;           /* Chestnut (primary action) */
+    --color-primary-dark: #C7695E;      /* Lighter Chestnut */
+    --color-secondary: #373F51;         /* Charcoal (headings, accents) */
+    --color-accent: #8E94F2;            /* Tropical Indigo (buttons, highlights) */
+    --color-bg: #EEF0EB;                /* Alabaster (background) */
+    --color-text: #0B0B0A;              /* Night (text) */
+    --color-text-secondary: #5A5A5A;    /* Gray-600 (subdued text) */
+    --card-bg: #FFFFFF;                 /* Pure white for cards */
+    --button-text-color: #FFFFFF;       /* White text on buttons */
+    --button-hover-primary: #8A3A31;    /* Darker Chestnut */
+    --button-hover-accent: #7B82D9;     /* Darker Tropical Indigo */
+}
+
+body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: 'Inter', sans-serif;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Dark Mode */
+.dark body{
+    --color-primary: #C7695E;        /* Lighter Chestnut */
+    --color-secondary: #8E94F2;      /* Tropical Indigo becomes secondary */
+    --color-accent: #A44A3F;         /* Chestnut becomes accent */
+    --color-bg: #1A1A1A;             /* Softened Night (easier on eyes) */
+    --color-text: #EEF0EB;           /* Alabaster for text */
+    --color-text-secondary: #B0B0B0; /* Light gray */
+    --card-bg: #252525;              /* Dark gray cards */
+    --button-text-color: #0B0B0A;    /* Night text on buttons */
+    --button-hover-primary: #D17A6F; /* Lighter Chestnut */
+    --button-hover-accent: #9CA1E6;  /* Lighter Tropical Indigo */
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  }
+  
+  .dark .btn-primary:hover {
+    --button-hover-color: #AFAECE;
+    background-color: var(--button-hover-primary);
+  }
+
+@layer components {
+    .btn-primary {
+      @apply px-6 py-2 rounded-lg bg-[color:var(--color-primary)] text-[color:var(--button-text-color)] hover:bg-[color:var(--button-hover-primary)] transition;
+    }
+  
+    .btn-accent {
+      @apply px-6 py-2 rounded-lg bg-[color:var(--color-accent)] text-[color:var(--button-text-color)] hover:bg-[color:var(--button-hover-accent)] transition;
+    }
+
+    .btn-hover {
+        @apply cursor-pointer hover:scale-105 transition duration-300 ease-in-out;
+    }
+  
+    .card {
+      @apply p-6 rounded-2xl shadow-md;
+      background-color: var(--card-bg);
+    }
+  
+    .text-secondary {
+      @apply text-[color:var(--color-text-secondary)];
+    }
+  
+    .section-title {
+      @apply text-3xl font-bold mb-8;
+      color: var(--color-secondary);
+    }
+
+    .info-banner {
+        @apply bg-[color:var(--card-bg)] p-4 rounded-lg border-[color:var(--color-secondary)] mb-4;
+    }
+
+    .banner-title {
+        @apply font-bold text-lg mb-2 text-[color:var(--color-text)];
+    }
+    
+    .banner-text {
+        @apply text-[color:var(--color-text-secondary)];
+    }
+
+    .progress-header {
+        @apply mb-2 flex justify-between items-center;
+    }
+    
+    .progress-count {
+        @apply text-sm font-medium text-[color:var(--color-accent)];
+    }
+    
+    .progress-alert {
+        @apply text-sm font-medium text-[color:var(--color-accent)];
+    }
+    
+    .progress-ready {
+        @apply text-sm font-medium text-[color:var(--color-accent)];
+    }
+
+    .progress-track {
+        @apply w-full rounded-full h-2.5;
+        background-color: color-mix(in srgb, var(--color-text-secondary) 20%, transparent);
+    }
+    
+    .progress-fill {
+        @apply h-2.5 rounded-full transition-all duration-500 ease-out;
+        background-color: var(--color-accent);
+    }
+
+    .loading-container {
+        @apply flex flex-col justify-center items-center my-8 max-w-3xl mx-auto;
+    }
+
+    .loading-spinner-container {
+        @apply flex items-center mb-4;
+    }
+
+    .loading-spinner {
+        @apply animate-spin rounded-full h-12 w-12 border-t-2 border-b-2;
+        border-color: var(--color-accent);
+    }
+
+    .loading-message {
+        @apply ml-3 text-lg font-medium text-[color:var(--color-text)];
+    }
+
+    .loading-progress-track {
+        @apply w-full rounded-full h-2 mb-6;
+        background-color: color-mix(in srgb, var(--color-text-secondary) 20%, transparent);
+    }
+
+    .loading-progress-fill {
+        @apply h-2 rounded-full transition-all duration-700 ease-out;
+        background-color: var(--color-accent);
+    }
+
+    .chef-tip-container {
+        @apply mt-2 p-4 rounded-lg text-center;
+        background-color: color-mix(in srgb, var(--color-accent) 10%, transparent);
+        border: 1px solid var(--color-accent);
+    }
+
+    .chef-tip-label {
+        @apply text-sm font-medium mb-1;
+        color: var(--color-text);
+    }
+
+    .chef-tip-text {
+        @apply text-sm italic;
+        color: var(--color-text-secondary);
+    }
+    
 }
