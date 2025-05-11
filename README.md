@@ -6,4 +6,6 @@ The app first let's user add ingredients. These ingredients will be sent to the 
 
 A minimum of five ingredients are required for the option to generate a recipe.
 
-Input-validation for the list of ingredients is simple. Complex validation, where the name of the ingredient is valid is yet to be implemented.
+Input-validation for the list of ingredients is simple.
+
+## Complex-validation, ability for users to make accounts and store recipes, implementation of Docker and deployment to AWS is in the works.
