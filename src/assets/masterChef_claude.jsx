@@ -5,7 +5,7 @@ export default function MasterChefClaude() {
             preserveAspectRatio="xMidYMid meet">
 
             <g transform="translate(0.000000,225.000000) scale(0.100000,-0.100000)"
-            fill="var(--color-primary)" stroke="none">
+            fill="var(--color-text)" stroke="none">
             <path d="M1052 2239 c-101 -19 -194 -81 -257 -168 l-33 -44 -66 2 c-162 6
             -314 -85 -386 -233 -118 -239 12 -526 270 -592 l70 -18 0 -188 c0 -113 4 -196
             11 -211 24 -54 45 -57 332 -57 277 0 297 3 281 44 -5 14 -35 16 -263 16 -297

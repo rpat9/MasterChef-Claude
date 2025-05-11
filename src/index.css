@@ -12,11 +12,10 @@ h1 {
 :root {
     /* Light Mode */
     --color-primary: #11142d;         /* #9C2C2C */
-    --color-primary-dark: #7A2222;    /* #7A2222 */
     --color-secondary: #2f3ced;       /*  */
     --color-accent: #2f3ced;          /*  */
     --color-bg: #edf2fe;              /*  */
-    --color-text: #442C2E;            /* #212529 */
+    --color-text: #000000;            /* #212529 */
     --color-text-secondary: #6C757D;  /*  */
     --card-bg: #FFFFFF;               /*  */
     --button-text-color: #FFFFFF;     /*  */
@@ -41,9 +40,9 @@ body {
     --color-text: #F8F9FA;            /* Paper white for text */
     --color-text-secondary: #B0B0B0;  /* Light gray */
     --card-bg: rgba(39, 37, 37, 0.726);               /* Dark gray cards */
-    --button-text-color: #F8F9FA;     /* Rich black text on buttons */
-    --button-hover-primary: #8a32f5;  /* Lighter Bordeaux red */
-    --button-hover-accent: #cf3854;   /* Darker golden yellow */
+    --button-text-color: #000000;     /* Rich black text on buttons */
+    --button-hover-primary: #c59afa;  /* #8a32f5 */
+    --button-hover-accent: #e098a6;   /* #cf3854 */
     background-color: var(--color-bg);
     color: var(--color-text);
   }

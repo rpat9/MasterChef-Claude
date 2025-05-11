@@ -61,13 +61,18 @@ export default function ChefHeader(){
 
     return (
 
-        <header className="flex justify-between p-4 h-[85px] bg-[var(--color-bg)] cursor-default text-[var(--color-primary)]" style={{boxShadow: "0px 1px 3px 0px rgba(0, 0, 0, 0.10), 0px 1px 2px 0px rgba(0, 0, 0, 0.06)"}}>
+        <header className="flex justify-between p-4 h-[85px] bg-[var(--color-bg)] cursor-default " style={{boxShadow: "0px 1px 3px 0px rgba(0, 0, 0, 0.10), 0px 1px 2px 0px rgba(0, 0, 0, 0.06)"}}>
 
             <div className="flex items-center gap-4">
 
-                <MasterChefClaude />
+                <a href="/" >
+                    <MasterChefClaude />
+                </a>
                 
-                <h1 className=" !font-normal">MasterChef Claude</h1>
+                <a href="/" className="hover:text-[color:var(--color-secondary)]">
+                    <h1 className="color-[var(--color-text)]">MasterChef Claude</h1>
+                </a>
+                
 
             </div>
 
@@ -108,7 +113,7 @@ export default function ChefHeader(){
                 <div className="flex items-center gap-4">
                     <button
                     onClick={toggleDarkMode}
-                    className="btn-accent btn-hover">
+                    className="btn-accent btn-hover py-2.5">
                         {isDarkMode ? (
                             <Sun size={20} />
                         ) : (
