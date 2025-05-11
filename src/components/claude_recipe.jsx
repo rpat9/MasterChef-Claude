@@ -2,15 +2,15 @@ import ReactMarkdown from "react-markdown"
 
 export default function(props){
     return(
-        <section className="card max-w-3xl mx-auto mt-8 border border-gray-200" aria-live="polite">
-          <h2 className="text-2xl font-semibold mb-3 mt-1">MasterChef Claude Recommends: </h2>
+        <section className="card max-w-3xl mx-auto mt-8 border border-[var(--color-secondary)]" aria-live="polite">
+          <h2 className="text-2xl font-semibold mb-3 mt-1 text-[color:var(--color-primary)]">MasterChef Claude Recommends: </h2>
             <ReactMarkdown className="prose prose-slate max-w-none"
             components={{
                 h1: ({ node, ...props }) => (
-                  <h1 className="text-3xl font-bold mb-4 text-[color:var(--color-text)]" {...props} />
+                  <h1 className="text-3xl font-bold mb-4 text-[color:var(--color-primary)]" {...props} />
                 ),
                 h2: ({ node, ...props }) => (
-                  <h2 className="text-2xl font-semibold mb-3 mt-6 text-[color:var(--color-secondary)]" {...props} />
+                  <h2 className="text-2xl font-semibold mb-3 mt-6 text-[color:var(--color-primary)]" {...props} />
                 ),
                 p: ({ node, ...props }) => (
                   <p className="text-base leading-relaxed mb-4 text-[color:var(--color-text)]" {...props} />

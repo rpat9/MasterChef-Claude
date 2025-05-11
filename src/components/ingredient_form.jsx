@@ -70,7 +70,7 @@ export default function IngredientForm() {
                     placeholder="e.g. oregano"
                     aria-label="Add ingredient button"
                     name="ingredient"
-                    className="grow border rounded-sm border-solid outline-[1px] border-black px-2 h-10 shadow-md shadow-amber-50"
+                    className="text-[var(--color-text)] grow border rounded-sm border-solid outline-[1px] border-[var(--color-primary)] px-2 h-10 shadow-md"
                 />
 
                 <button type="submit" className="btn-primary btn-hover">+ Add Ingredient</button>

@@ -28,7 +28,21 @@ export default function RecipeLoading() {
           setLoadingTip(cookingTips[Math.floor(Math.random() * cookingTips.length)]);
         }, 2000);
         
-        return () => clearInterval(tipTimer);
+        const stageTimer = setInterval(() => {
+            setLoadingStage((prevStage) => {
+              if (prevStage < 4) {
+                return prevStage + 1;
+              } else {
+                return 1;
+              }
+            });
+          }, 2300); 
+        
+          return () => {
+            clearInterval(tipTimer);
+            clearInterval(stageTimer);
+          };
+
       }, []);
 
       return (

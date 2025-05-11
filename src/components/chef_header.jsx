@@ -1,8 +1,9 @@
-import masterChef_claude from "../assets/masterChef_claude.png"
+import MasterChefClaude from "../assets/masterChef_claude.jsx";
 import { useState, useEffect } from "react";
 import { auth } from "../services/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import AuthModal from "./auth/authmodal.jsx";
+import { Sun, Moon } from "lucide-react";
 
 export default function ChefHeader(){
 
@@ -10,7 +11,29 @@ export default function ChefHeader(){
     const [user, setUser] = useState(null);
     const [showAuthModal, setShowAuthModal] = useState(false);
     const [authMode, setAuthMode] = useState("signin"); // signin or signup
+    const [isDarkMode, setIsDarkMode] = useState(false);
 
+    useEffect(() => {
+    
+        const darkModePreference = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        setIsDarkMode(darkModePreference);
+        
+        if (darkModePreference) {
+          document.documentElement.classList.add("dark");
+        }
+        
+        const handleScroll = () => {
+          setIsScrolled(window.scrollY > 10);
+        };
+        
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+      }, []);
+
+      const toggleDarkMode = () => {
+        setIsDarkMode(!isDarkMode);
+        document.documentElement.classList.toggle("dark");
+      };
     
     useEffect(()=>{
         const unsubscribe = onAuthStateChanged(auth, (currentUser) =>{
@@ -38,13 +61,13 @@ export default function ChefHeader(){
 
     return (
 
-        <header className="flex justify-center items-center gap-[11px] h-[85px] !bg-white cursor-default" style={{boxShadow: "0px 1px 3px 0px rgba(0, 0, 0, 0.10), 0px 1px 2px 0px rgba(0, 0, 0, 0.06)"}}>
+        <header className="flex justify-between p-4 h-[85px] bg-[var(--color-bg)] cursor-default text-[var(--color-primary)]" style={{boxShadow: "0px 1px 3px 0px rgba(0, 0, 0, 0.10), 0px 1px 2px 0px rgba(0, 0, 0, 0.06)"}}>
 
             <div className="flex items-center gap-4">
 
-                <img className="w-[55px] !bg-white" src={masterChef_claude} alt="MasterChef Claude" />
+                <MasterChefClaude />
                 
-                <h1 className="!bg-white !font-normal">MasterChef Claude</h1>
+                <h1 className=" !font-normal">MasterChef Claude</h1>
 
             </div>
 
@@ -81,7 +104,20 @@ export default function ChefHeader(){
 
                     </>
                 )}
+
+                <div className="flex items-center gap-4">
+                    <button
+                    onClick={toggleDarkMode}
+                    className="btn-accent btn-hover">
+                        {isDarkMode ? (
+                            <Sun size={20} />
+                        ) : (
+                            <Moon size={20}/>
+                        )}
+                    </button>
+                </div>
             </div>
+
 
             {showAuthModal && (
                 <AuthModal 
