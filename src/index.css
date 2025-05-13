@@ -17,7 +17,7 @@ h1 {
     --color-bg: #edf2fe;              /*  */
     --color-text: #000000;            /* #212529 */
     --color-text-secondary: #6C757D;  /*  */
-    --card-bg: #FFFFFF;               /*  */
+    --card-bg: rgba(200, 204, 214, 0.808);               /* #FFFFFF */
     --button-text-color: #FFFFFF;     /*  */
     --button-hover-primary: #1b2049;  /*  */
     --button-hover-accent: #4954ee;   /*  */
@@ -34,7 +34,6 @@ body {
 .dark body{
     --color-primary: #af70fc;         /* #BC3F3F */
     --color-secondary: #03DAC5;       /* #FFBA08 */
-    --color-error: #CF6679;
     --color-accent: #CF6679;          /* Bordeaux red becomes accent */
     --color-bg: #121212;              /* Softened Night (easier on eyes) */
     --color-text: #F8F9FA;            /* Paper white for text */
