@@ -46,24 +46,24 @@ export default function RecipeLoading() {
       }, []);
 
       return (
-        <div className="loading-container">
+        <div className="loading-container px-4 md:px-0">
             <div className="loading-spinner-container">
                 <div className="loading-spinner"></div>
-                    <span className="loading-message">
+                    <span className="loading-message text-sm md:text-lg">
                     {loadingMessages[loadingStage - 1]}
                     </span>
             </div>
       
-            <div className="loading-progress-track">
+            <div className="loading-progress-track w-full md:w-3/4 lg:w-full">
                 <div 
                 className="loading-progress-fill" 
                 style={{ width: `${loadingStage * 25}%` }}
                 ></div>
             </div>
       
-            <div className="chef-tip-container">
-                <p className="chef-tip-label">Chef's Tip While You Wait:</p>
-                <p className="chef-tip-text">{loadingTip}</p>
+            <div className="chef-tip-container w-full md:w-3/4 lg:w-full">
+                <p className="chef-tip-label text-xs md:text-sm">Chef's Tip While You Wait:</p>
+                <p className="chef-tip-text text-xs md:text-sm">{loadingTip}</p>
             </div>
         </div>
       )
