@@ -10,17 +10,19 @@ h1 {
 }
 
 :root {
-    /* Light Mode */
-    --color-primary: #11142d;         /* #9C2C2C */
-    --color-secondary: #2f3ced;       /*  */
-    --color-accent: #2f3ced;          /*  */
-    --color-bg: #edf2fe;              /*  */
-    --color-text: #000000;            /* #212529 */
-    --color-text-secondary: #6C757D;  /*  */
-    --card-bg: rgba(200, 204, 214, 0.808);               /* #FFFFFF */
-    --button-text-color: #FFFFFF;     /*  */
-    --button-hover-primary: #1b2049;  /*  */
-    --button-hover-accent: #4954ee;   /*  */
+    /* Light Mode - Updated for a warmer, more inviting feel */
+    --color-primary: #5652E5;         /* Vibrant purple-blue */
+    --color-secondary: #3B82F6;       /* Bright blue */
+    --color-accent: #8B5CF6;          /* Soft purple */
+    --color-bg: #F3F4F6;              /* Light gray background */
+    --color-text: #1F2937;            /* Dark gray text */
+    --color-text-secondary: #6B7280;  /* Medium gray text */
+    --card-bg: #FFFFFF;               /* White cards */
+    --header-bg: #F9FAFB;             /* Very light gray header */
+    --button-text-color: #FFFFFF;     /* White text on buttons */
+    --button-hover-primary: #4338CA;  /* Darker purple when hovering */
+    --button-hover-accent: #7C3AED;   /* Darker accent when hovering */
+    --shadow-color: rgba(0, 0, 0, 0.1);
 }
 
 body {
@@ -30,34 +32,38 @@ body {
     transition: background-color 0.3s, color 0.3s;
 }
 
-/* Dark Mode */
+/* Dark Mode - Updated for better contrast and visual appeal */
 .dark body{
-    --color-primary: #af70fc;         /* #BC3F3F */
-    --color-secondary: #03DAC5;       /* #FFBA08 */
-    --color-accent: #CF6679;          /* Bordeaux red becomes accent */
-    --color-bg: #121212;              /* Softened Night (easier on eyes) */
-    --color-text: #F8F9FA;            /* Paper white for text */
-    --color-text-secondary: #B0B0B0;  /* Light gray */
-    --card-bg: rgba(39, 37, 37, 0.726);               /* Dark gray cards */
-    --button-text-color: #000000;     /* Rich black text on buttons */
-    --button-hover-primary: #c59afa;  /* #8a32f5 */
-    --button-hover-accent: #e098a6;   /* #cf3854 */
+    --color-primary: #8B5CF6;         /* Lighter purple */
+    --color-secondary: #60A5FA;       /* Bright blue */
+    --color-accent: #A78BFA;          /* Softer purple */
+    --color-bg: #1F2937;              /* Dark blue-gray background */
+    --color-text: #F9FAFB;            /* Very light gray text */
+    --color-text-secondary: #D1D5DB;  /* Light gray text */
+    --card-bg: #111827;               /* Darker cards */
+    --header-bg: #111827;             /* Same as card-bg for consistency */
+    --button-text-color: #FFFFFF;     /* White text on buttons */
+    --button-hover-primary: #7C3AED;  /* Lighter purple when hovering */
+    --button-hover-accent: #8B5CF6;   /* Lighter accent when hovering */
+    --shadow-color: rgba(0, 0, 0, 0.5);
     background-color: var(--color-bg);
     color: var(--color-text);
-  }
+}
   
   .dark .btn-primary:hover {
     --button-hover-color: #CE4F4F;
     background-color: var(--button-hover-primary);
   }
 
-@layer components {
+  @layer components {
     .btn-primary {
       @apply px-6 py-2 rounded-lg bg-[color:var(--color-primary)] text-[color:var(--button-text-color)] hover:bg-[color:var(--button-hover-primary)] transition;
+      box-shadow: 0 2px 5px var(--shadow-color);
     }
   
     .btn-accent {
       @apply px-6 py-2 rounded-lg bg-[color:var(--color-accent)] text-[color:var(--button-text-color)] hover:bg-[color:var(--button-hover-accent)] transition;
+      box-shadow: 0 2px 5px var(--shadow-color);
     }
 
     .btn-hover {
@@ -67,6 +73,8 @@ body {
     .card {
       @apply p-6 rounded-2xl shadow-md;
       background-color: var(--card-bg);
+      border: 1px solid rgba(var(--color-secondary), 0.1);
+      box-shadow: 0 4px 6px var(--shadow-color);
     }
   
     .text-secondary {
@@ -79,7 +87,10 @@ body {
     }
 
     .info-banner {
-        @apply bg-[color:var(--card-bg)] p-4 rounded-lg border-[color:var(--color-secondary)] mb-4;
+        @apply bg-[color:var(--card-bg)] p-4 rounded-lg mb-4;
+        border-left: 4px solid var(--color-secondary);
+        border-right: 4px solid var(--color-secondary);
+        box-shadow: 0 2px 4px var(--shadow-color);
     }
 
     .banner-title {
@@ -114,6 +125,7 @@ body {
     .progress-fill {
         @apply h-2.5 rounded-full transition-all duration-500 ease-out;
         background-color: var(--color-secondary);
+        box-shadow: 0 1px 3px var(--shadow-color);
     }
 
     .loading-container {
