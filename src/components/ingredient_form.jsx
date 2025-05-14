@@ -54,16 +54,16 @@ export default function IngredientForm() {
 
 
     return (
-        <section className="pt-8 pb-4 px-8">
+        <section className="pt-8 pb-4 px-4 md:px-8">
 
             {ingredients.length === 0 && !recipe && (
                 <div className="max-w-3xl mx-auto mb-6 text-center">
-                    <h2 className="text-xl text-[var(--color-primary)]">Create your perfect recipe with MasterChef Claude</h2>
-                    <p className="text-[var(--color-secondary)]">Add at least 5 ingredients to generate a delicious recipe tailored to what you have available.</p>
+                    <h2 className="text-lg md:text-xl text-[var(--color-primary)]">Create your perfect recipe with MasterChef Claude</h2>
+                    <p className="text-sm md:text-base text-[var(--color-secondary)]">Add at least 5 ingredients to generate a delicious recipe tailored to what you have available.</p>
                 </div>
             )}
 
-            <form action={addIngredient} className="flex gap-4 justify-center w-full max-w-3xl min-w-3xs mx-auto">
+            <form action={addIngredient} className="flex flex-col md:flex-row gap-4 justify-center w-full max-w-3xl min-w-xs mx-auto">
 
                 <input 
                     type="text"
