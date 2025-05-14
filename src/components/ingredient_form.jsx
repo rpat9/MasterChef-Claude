@@ -3,6 +3,7 @@ import IngredientList from "./ingredient_list.jsx";
 import ClaudeRecipe from "./claude_recipe.jsx";
 import RecipeLoading from "./recipe_loading.jsx";
 import { getRecipeFromClaude } from "../services/claudeService.js";
+import IngredientProgress from "./ingredient_progress.jsx";
 
 export default function IngredientForm() {
 
@@ -58,8 +59,8 @@ export default function IngredientForm() {
 
             {ingredients.length === 0 && !recipe && (
                 <div className="max-w-3xl mx-auto mb-6 text-center">
-                    <h2 className="text-lg md:text-xl text-[var(--color-primary)]">Create your perfect recipe with MasterChef Claude</h2>
-                    <p className="text-sm md:text-base text-[var(--color-secondary)]">Add at least 5 ingredients to generate a delicious recipe tailored to what you have available.</p>
+                    <IngredientProgress 
+                        ingredientCount = {ingredients.length} />
                 </div>
             )}
 

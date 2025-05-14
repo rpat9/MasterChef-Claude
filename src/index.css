@@ -83,11 +83,11 @@ body {
     }
 
     .banner-title {
-        @apply font-bold text-lg mb-2 text-[color:var(--color-text)];
+        @apply font-bold text-xl mb-2 text-[color:var(--color-primary)];
     }
     
     .banner-text {
-        @apply text-[color:var(--color-text-secondary)];
+        @apply text-[color:var(--color-secondary)];
     }
 
     .progress-header {
