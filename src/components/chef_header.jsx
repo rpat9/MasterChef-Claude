@@ -70,13 +70,13 @@ export default function ChefHeader(){
         <header className="flex flex-col relative">
             <div className="flex justify-between p-4 h-[85px] bg-[var(--card-bg)] cursor-default">
 
-                <div className="flex items-center gap-4">
-                    <a href="/" >
+                <div className="flex items-center gap-2 md:gap-4 max-w-[75%]">
+                    <a href="/" className="flex-shrink-0">
                         <MasterChefClaude />
                     </a>
                     
-                    <a href="/" className="hover:text-[color:var(--color-secondary)]">
-                        <h1 className="color-[var(--color-text)] text-2xl md:text-3xl">MasterChef Claude</h1>
+                    <a href="/" className="hover:text-[color:var(--color-secondary)] ">
+                        <h1 className="color-[var(--color-text)] text-lg sm:text-2xl md:text-3xl font-bold leading-tight">MasterChef Claude</h1>
                     </a>
                 </div>
 
