@@ -22,7 +22,7 @@ export default function(props){
                   <ol className="list-decimal pl-2 md:pl-4 space-y-2 marker:font-bold marker:text-[color:var(--color-accent)]" {...props} />
                 ),
                 li: ({ node, ...props }) => (
-                  <li className="ml-1 md:ml-2 text-sm md:text-base text-[color:var(--color-text)]" {...props} />
+                  <li className="ml-2 md:ml-3 text-sm md:text-base text-[color:var(--color-text)]" {...props} />
                 ),
                 strong: ({ node, ...props }) => (
                   <strong className="font-bold text-[color:var(--color-primary)]" {...props} />
