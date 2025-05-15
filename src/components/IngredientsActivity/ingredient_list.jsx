@@ -1,4 +1,4 @@
-import TrashIcon from "../assets/trashIcon.jsx"
+import TrashIcon from "../../assets/trashIcon.jsx"
 import IngredientProgress from "./ingredient_progress.jsx"
 
 export default function IngredientList({ ingredientsArray, getRecipe, onDeleteIngredient }){

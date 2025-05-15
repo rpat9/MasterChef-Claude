@@ -1,8 +1,8 @@
 import { useState } from "react";
 import IngredientList from "./ingredient_list.jsx";
-import ClaudeRecipe from "./claude_recipe.jsx";
-import RecipeLoading from "./recipe_loading.jsx";
-import { getRecipeFromClaude } from "../services/claudeService.js";
+import ClaudeRecipe from "../RecipeActivity/claude_recipe.jsx";
+import RecipeLoading from "../RecipeActivity/recipe_loading.jsx";
+import { getRecipeFromClaude } from "../../services/claudeService.js";
 import IngredientProgress from "./ingredient_progress.jsx";
 
 export default function IngredientForm() {
