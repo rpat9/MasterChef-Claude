@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../services/firebase";
+import { addUser } from "../../services/userConfig";
 
 export default function SignUpForm({ onClose, onSwitchMode }) {
 
@@ -21,8 +22,24 @@ export default function SignUpForm({ onClose, onSwitchMode }) {
         }
 
         try{
-            await createUserWithEmailAndPassword(auth, email, password);
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+            let username = '';
+
+            if(email){
+                username = email.split('@')[0];
+            }
+
+            const userData = {
+                userEmail: user.email,
+                username: username,
+                createdAt: new Date()
+            }
+
+            await addUser(user.uid, userData);
+            
             onClose();
+            
         } catch (error) {
             setError(error.message);
         }
