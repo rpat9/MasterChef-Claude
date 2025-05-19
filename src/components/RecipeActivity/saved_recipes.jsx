@@ -3,6 +3,7 @@ import { collection, query, where, getDocs, orderBy, doc, updateDoc, deleteDoc }
 import { auth, db } from "../../services/firebase";
 import ReactMarkdown from "react-markdown";
 import { BookmarkCheck, BookmarkX, Trash2, Edit, Heart, Save, X } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function SavedRecipes() {
   const [recipes, setRecipes] = useState([]);
@@ -11,6 +12,9 @@ export default function SavedRecipes() {
   const [expandedRecipe, setExpandedRecipe] = useState(null);
   const [editingNotes, setEditingNotes] = useState(null);
   const [noteContent, setNoteContent] = useState("");
+
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
@@ -132,13 +136,21 @@ export default function SavedRecipes() {
           <h2 className="text-xl md:text-2xl font-semibold mb-3 text-[var(--color-primary)]">
             Saved Recipes
           </h2>
-          <p className="mb-4">Please sign in to view your saved recipes.</p>
-          <button 
-            className="btn-primary btn-hover"
-            onClick={() => document.querySelector('.auth-trigger-button')?.click()}
-          >
-            Sign In
-          </button>
+          <p className="mb-4">Please sign in or sign up to view your saved recipes.</p>
+          <div className="flex flex-col md:flex-row gap-2 justify-center">
+            <button
+              className="btn-primary btn-hover"
+              onClick={() => navigate(`/signin?redirect=${encodeURIComponent(location.pathname)}`)}
+            >
+              Sign In
+            </button>
+            <button
+              className="btn-accent btn-hover"
+              onClick={() => navigate(`/signup?redirect=${encodeURIComponent(location.pathname)}`)}
+            >
+              Sign Up
+            </button>
+          </div>
         </div>
       </div>
     );
