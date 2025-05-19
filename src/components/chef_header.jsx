@@ -4,6 +4,7 @@ import { auth } from "../services/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import AuthModal from "./auth/authmodal.jsx";
 import { Sun, Moon, Menu, X } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 
 export default function ChefHeader(){
 
@@ -11,9 +12,9 @@ export default function ChefHeader(){
     const [user, setUser] = useState(null);
     const [showAuthModal, setShowAuthModal] = useState(false);
     const [authMode, setAuthMode] = useState("signin"); // signin or signup
-    const [isScrolled, setIsScrolled] = useState(false)
     const [isDarkMode, setIsDarkMode] = useState(false);
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const location = useLocation();
 
     useEffect(() => {
     
@@ -24,12 +25,6 @@ export default function ChefHeader(){
           document.documentElement.classList.add("dark");
         }
         
-        const handleScroll = () => {
-          setIsScrolled(window.scrollY > 10);
-        };
-        
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
       }, []);
 
       const toggleDarkMode = () => {
@@ -37,8 +32,8 @@ export default function ChefHeader(){
         document.documentElement.classList.toggle("dark");
       };
     
-    useEffect(()=>{
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) =>{
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
         });
 
@@ -54,7 +49,6 @@ export default function ChefHeader(){
         }
     }
 
-
     const openAuthModal = (mode) => {
         setAuthMode(mode);
         setShowAuthModal(true);
@@ -64,6 +58,10 @@ export default function ChefHeader(){
         setIsMobileMenuOpen(!isMobileMenuOpen);
     }
 
+    // Check if link is active
+    const isActive = (path) => {
+        return location.pathname === path;
+    }
 
     return (
 
@@ -71,13 +69,13 @@ export default function ChefHeader(){
             <div className="flex justify-between p-4 h-[85px] bg-[var(--card-bg)] cursor-default">
 
                 <div className="flex items-center gap-2 md:gap-4 max-w-[75%]">
-                    <a href="/" className="flex-shrink-0">
+                    <Link to="/" className="flex-shrink-0">
                         <MasterChefClaude />
-                    </a>
+                    </Link>
                     
-                    <a href="/" className="hover:text-[color:var(--color-secondary)] ">
+                    <Link to="/" className="hover:text-[color:var(--color-secondary)] ">
                         <h1 className="color-[var(--color-text)] text-lg sm:text-2xl md:text-3xl font-bold leading-tight">MasterChef Claude</h1>
-                    </a>
+                    </Link>
                 </div>
 
                 {/* Mobile menu button - only visible on small screens */}
@@ -91,8 +89,17 @@ export default function ChefHeader(){
                     </button>
                 </div>
 
-                {/* Desktop menu - hidden on small screens */}
                 <div className="hidden md:flex items-center gap-4">
+                    <nav className="flex items-center mr-1">
+                        <button className="btn-primary btn-hover">
+                            <Link 
+                                to="/saved-recipes" 
+                            >
+                                Saved Recipes
+                            </Link>
+                        </button>
+                    </nav>
+
                     {user ? (
                         <div className="flex items-center gap-4">
                             <span className="text-[var(--color-secondary)] ml-10 hover:underline">
@@ -138,9 +145,18 @@ export default function ChefHeader(){
             {/* Mobile menu dropdown */}
             {isMobileMenuOpen && (
                 <div className="md:hidden absolute top-[85px] left-0 right-0 bg-[var(--color-bg)] shadow-lg z-50 py-4 px-6 flex flex-col gap-4 border-t border-[var(--color-text-secondary)]">
+                        <button className="btn-primary btn-hover">
+                            <Link 
+                                to="/saved-recipes" 
+                            >
+                                Saved Recipes
+                            </Link>
+                        </button>
+                    
+                    
                     {user ? (
                         <>
-                            <span className="text-[var(--color-secondary)] text-center font-semibold hover:underline cursor-default">
+                            <span className="text-[var(--color-secondary)] text-center font-semibold hover:underline cursor-default mt-2">
                                 Hello, {user.email?.split("@")[0] || "Chef"}
                             </span>
 
@@ -154,7 +170,7 @@ export default function ChefHeader(){
                         <>
                             <button
                                 onClick={() => openAuthModal("signin")}
-                                className="btn-accent w-full">
+                                className="btn-accent w-full mt-2">
                                 Sign In
                             </button>
 

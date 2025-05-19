@@ -89,7 +89,7 @@ export default function IngredientForm() {
                 <RecipeLoading />
             )}
 
-            {recipe && <ClaudeRecipe recipe={recipe}/>}
+            {recipe && <ClaudeRecipe recipe={recipe} ingredients={ingredients}/>}
 
         </section>
     )
