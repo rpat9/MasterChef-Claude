@@ -1,11 +1,54 @@
-# MasterChef-Claude
-React and Tailwind-based app that utilizes Claude API to send a list of ingredients and receive a recipe which is recommended to the user.
+# MasterChef Claude
 
-# About MasterChef-Claude
-The app first let's user add ingredients. These ingredients will be sent to the ClaudeAPI and the user receives a recipe that Claude generates.
+A full-stack React and Tailwind-based web application that generates personalized recipes based on your available ingredients using Claude AI.
 
-A minimum of five ingredients are required for the option to generate a recipe.
+## Features
 
-Input-validation for the list of ingredients is simple.
+### 🧑‍🍳 Recipe Generation
 
-## Complex-validation, ability for users to make accounts and store recipes, implementation of Docker and deployment to AWS is in the works.
+- Add ingredients you have on hand
+- Generate custom recipes using Claude AI
+- Smart ingredient validation and duplicate prevention
+- Progress tracking (minimum 5 ingredients required)
+
+### 👤 User Authentication
+
+- Firebase Authentication integration
+- Sign up/Sign in functionality
+- User-specific recipe saving
+- Secure user sessions
+
+### 💾 Recipe Management
+
+- Save generated recipes to your personal collection
+- Add personal notes to saved recipes
+- Mark recipes as favorites
+- View full recipe details with markdown rendering
+- Delete unwanted recipes
+
+### 🎨 User Experience
+
+- Dark/Light theme toggle
+- Responsive design for mobile and desktop
+- Loading states and visual feedback
+- Clean, modern interface
+
+### 🏗️ Technical Architecture
+
+- **Frontend**: React with Vite, Tailwind CSS
+- **Backend**: Node.js with Express
+- **Database**: Firebase Firestore
+- **AI Integration**: Claude API via Anthropic SDK
+- **Authentication**: Firebase Auth
+- **Deployment**: Docker and AWS
+
+## Getting Started
+
+1. Set up environment variables for Firebase configuration and your unique Claude API key
+2. Install dependencies: `npm install`
+3. Run backend: `npm start` (port 3001)
+4. Run frontend: `npm run dev` (port 5173)
+
+## Docker Support
+
+Both frontend and backend include Dockerfiles for containerized deployment with proper environment variable handling.
