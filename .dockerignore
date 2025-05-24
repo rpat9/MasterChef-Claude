@@ -1,9 +1,27 @@
-.dockerignore
-.env
-node_modules
+# Node.js specific ignores
+**/node_modules
 npm-debug.log
-yarn-error.log
+.npm/
+.yarn/
+npm-cache/
+
+# Environment variables
+.env
+.env.*.local
+.env.local
+
+# Build outputs (these are generated inside container, no need to copy from host)
+**/dist
+**/build
+**/out
+
+# Editor and OS specific files
+.vscode/
+.idea/
+.DS_Store
+*.swp
+Thumbs.db
+
+# Git ignores
 .git
 .gitignore
-dist
-build
