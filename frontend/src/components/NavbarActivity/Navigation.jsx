@@ -10,7 +10,7 @@ export function Navigation({ isMobile = false }) {
     const location = useLocation();
     const isActive = (path) => location.pathname === path;
     
-    const baseClasses = isMobile ? "text-center btn-hover" : "btn-hover";
+    const baseClasses = isMobile ? "text-center btn-hover w-full" : "btn-hover";
 
     return (
         <nav className="flex items-center">

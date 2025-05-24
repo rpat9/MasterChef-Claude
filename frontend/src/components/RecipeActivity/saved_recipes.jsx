@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
-import { auth, db } from "../../services/firebase";
+import { auth, db } from "../../services/firebase.js";
 import { useNavigate, useLocation } from "react-router-dom";
 import RecipeCard from "./RecipeCard.jsx";
 import LoadingSpinner from "./LoadingSpinner.jsx";

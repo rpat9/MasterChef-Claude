@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { auth } from "../../services/firebase";
+import { auth } from "../../services/firebase.js";
 import { saveRecipe } from "../../services/saveRecipe.js";
 import { BookmarkPlus, Check, LogIn } from "lucide-react";
-import MarkdownRenderer from "./MarkdownRenderer";
+import MarkdownRenderer from "./MarkdownRenderer.jsx";
 
 export default function ClaudeRecipe({ recipe, ingredients }) {
   const [user, setUser] = useState(null);

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { doc, updateDoc, deleteDoc } from "firebase/firestore";
-import { db } from "../../services/firebase";
+import { db } from "../../services/firebase.js";
 import { Heart, Trash2, Edit, Save, X, ChevronDown, ChevronUp } from "lucide-react";
 import  MarkdownRenderer from "./MarkdownRenderer.jsx";
 import { Link } from "react-router-dom";

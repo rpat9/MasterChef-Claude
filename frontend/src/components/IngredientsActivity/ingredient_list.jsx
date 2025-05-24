@@ -39,7 +39,7 @@ export default function IngredientList({ ingredientsArray, getRecipe, onDeleteIn
 
                 <div className="pr-3 md:pr-5 pl-3 md:pl-5 pb-2">
                     <h3 className="block !font-bold text-center md:text-left text-lg md:text-[1.17em] mt-[0.83em] mb-[0.1em] text-[var(--color-primary)]">Ready for a recipe?</h3>
-                    <p classname="text-sm md:text-base text-center md:text-left text-[var(--color-text-secondary)]">Generate a recipe from your list of ingredients.</p>
+                    <p className="text-sm md:text-base text-center md:text-left text-[var(--color-text-secondary)]">Generate a recipe from your list of ingredients.</p>
                 </div>
 
                 <button onClick={getRecipe} type="submit" className="w-full md:w-auto btn-primary btn-hover my-2 md:my-0">Get a recipe</button>
