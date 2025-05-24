@@ -146,6 +146,16 @@ export default function SavedRecipes() {
           </div>
         )}
       </div>
+
+      <div className="mt-6 text-center">
+        <button
+          className="btn-primary btn-hover"
+          onClick={() => navigate("/")}
+        >
+          Back to Homepage
+        </button>
+      </div>
+
     </section>
   );
 }
