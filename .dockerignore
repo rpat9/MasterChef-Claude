@@ -1,0 +1,9 @@
+.dockerignore
+.env
+node_modules
+npm-debug.log
+yarn-error.log
+.git
+.gitignore
+dist
+build
