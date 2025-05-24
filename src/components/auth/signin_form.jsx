@@ -1,43 +1,53 @@
-import { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../services/firebase";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../../Contexts/AuthContext";
 
 export default function SignInForm() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
   
   const navigate = useNavigate();
   const location = useLocation();
 
+  const { signIn, authLoading, user } = useAuth();
+
   const params = new URLSearchParams(location.search);
   const redirect = params.get("redirect") || "/";
+
   
+  useEffect(() => {
+    if (user) {
+      navigate(redirect, { replace: true });
+    }
+  }, [user, navigate, redirect]);
 
   const handleSignIn = async (e) => {
+
     e.preventDefault();
+
     setError("");
-    setLoading(true);
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate(redirect, { replace: true });
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
+    
+    const result = await signIn(email, password);
+    
+    if (!result.success) {
+      setError(result.error);
     }
+    
   };
 
   return (
     <form onSubmit={handleSignIn} className="space-y-6">
+
       {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
+
       <div>
+
         <label className="block text-[var(--color-text)] mb-2" htmlFor="email">
           Email
         </label>
+
         <input
           id="email"
           type="email"
@@ -48,11 +58,15 @@ export default function SignInForm() {
           required
           autoFocus
         />
+
       </div>
+
       <div>
+
         <label className="block text-[var(--color-text)] mb-2" htmlFor="password">
           Password
         </label>
+
         <input
           id="password"
           type="password"
@@ -63,13 +77,15 @@ export default function SignInForm() {
           required
         />
       </div>
+
       <button
         type="submit"
         className="w-full btn-primary btn-hover py-2 rounded-md text-lg font-semibold"
-        disabled={loading}
+        disabled={authLoading}
       >
-        {loading ? "Signing In..." : "Sign In"}
+        {authLoading ? "Signing In..." : "Sign In"}
       </button>
+      
     </form>
   );
 }
