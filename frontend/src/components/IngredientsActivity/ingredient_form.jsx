@@ -4,6 +4,7 @@ import ClaudeRecipe from "../RecipeActivity/claude_recipe.jsx";
 import RecipeLoading from "../RecipeActivity/recipe_loading.jsx";
 import { getRecipeFromClaude } from "../../services/claudeService.js";
 import IngredientProgress from "./ingredient_progress.jsx";
+import { toast } from "react-hot-toast";
 
 export default function IngredientForm() {
 
@@ -30,16 +31,16 @@ export default function IngredientForm() {
         const newIngredient = formData.get("ingredient").trim();
 
         if(!newIngredient){
-            alert("Please enter an ingredient");
+            toast.error("Please enter an ingredient");
             return;
         }
 
         if (ingredients.includes(newIngredient)){
-            alert("You already added this ingredient");
+            toast.error("You already added this ingredient");
             return;
 
         } else if (!/^[a-zA-Z\s\-]+$/.test(newIngredient)) {
-            alert("Please enter a valid ingredient (letters, spaces, and hyphens only)");
+            toast.error("Please enter a valid ingredient (letters, spaces, and hyphens only)");
             return;
         }
 

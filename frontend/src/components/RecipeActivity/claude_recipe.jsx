@@ -3,6 +3,7 @@ import { auth } from "../../services/firebase.js";
 import { saveRecipe } from "../../services/saveRecipe.js";
 import { BookmarkPlus, Check, LogIn } from "lucide-react";
 import MarkdownRenderer from "./MarkdownRenderer.jsx";
+import { toast } from "react-hot-toast";
 
 export default function ClaudeRecipe({ recipe, ingredients }) {
   const [user, setUser] = useState(null);
@@ -45,7 +46,7 @@ export default function ClaudeRecipe({ recipe, ingredients }) {
       setTimeout(() => setIsSaved(false), 3000);
     } catch (error) {
       console.error("Error saving recipe:", error);
-      alert("Failed to save recipe. Please try again.");
+      toast.error("Failed to save recipe. Please try again.");
     } finally {
       setIsSaving(false);
     }

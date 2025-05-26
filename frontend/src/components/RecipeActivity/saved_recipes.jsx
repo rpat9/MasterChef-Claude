@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import RecipeCard from "./RecipeCard.jsx";
 import LoadingSpinner from "./LoadingSpinner.jsx";
 import EmptyState from "./EmptyState.jsx";
+import { toast } from "react-hot-toast";
 
 export default function SavedRecipes() {
   const [recipes, setRecipes] = useState([]);
@@ -49,24 +50,29 @@ export default function SavedRecipes() {
       );
 
       const querySnapshot = await getDocs(q);
-      console.log("Query snapshot size:", querySnapshot.size);
+      
 
       const recipesList = querySnapshot.docs.map(doc => {
         const data = doc.data();
-        console.log("Recipe data:", { id: doc.id, ...data });
+        
         return {
           id: doc.id,
           ...data
         };
       });
 
-      console.log("Fetched recipes:", recipesList);
+      console.log("Fetched recipes!");
       setRecipes(recipesList);
 
     } catch (error) {
+
+      toast.error('Error loading recipes.');
       console.error("Error fetching recipes:", error);
+
       setError(error.message);
+
     } finally {
+
       setLoading(false);
     }
   };

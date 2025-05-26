@@ -34,7 +34,7 @@ export const saveRecipe = async (userId, recipeContent, recipeTitle, ingredients
   
       const docRef = await addDoc(collection(db, "recipes"), recipeData);
 
-      console.log("Recipe saved successfully with ID:", docRef.id);
+      console.log("Recipe saved successfully");
 
       return docRef.id;
 
