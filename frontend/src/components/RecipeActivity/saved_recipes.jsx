@@ -18,30 +18,43 @@ export default function SavedRecipes() {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
-      console.log("Auth state changed:", currentUser?.uid);
+      
       setUser(currentUser);
+
       if (currentUser) {
+
         fetchRecipes(currentUser.uid);
+
       } else {
+
         setRecipes([]);
         setLoading(false);
+
       }
+
     });
+
     return () => unsubscribe();
+
   }, []);
 
   useEffect(() => {
+
     if (user) {
+
       fetchRecipes(user.uid);
+
     }
+
   }, [location.pathname, user]);
 
   const fetchRecipes = async (userId) => {
+
     setLoading(true);
+
     setError(null);
     
     try {
-      console.log("Fetching recipes for user:", userId);
       
       const q = query(
         collection(db, "recipes"),
@@ -51,8 +64,8 @@ export default function SavedRecipes() {
 
       const querySnapshot = await getDocs(q);
       
-
       const recipesList = querySnapshot.docs.map(doc => {
+
         const data = doc.data();
         
         return {
@@ -62,11 +75,13 @@ export default function SavedRecipes() {
       });
 
       console.log("Fetched recipes!");
+
       setRecipes(recipesList);
 
     } catch (error) {
 
       toast.error('Error loading recipes.');
+
       console.error("Error fetching recipes:", error);
 
       setError(error.message);
@@ -75,16 +90,21 @@ export default function SavedRecipes() {
 
       setLoading(false);
     }
+
   };
 
   const handleRecipeUpdate = (updatedRecipe) => {
+
     setRecipes(recipes.map(recipe => 
       recipe.id === updatedRecipe.id ? updatedRecipe : recipe
     ));
+
   };
 
   const handleRecipeDelete = (recipeId) => {
+
     setRecipes(recipes.filter(recipe => recipe.id !== recipeId));
+    
   };
 
   if (!user) {
