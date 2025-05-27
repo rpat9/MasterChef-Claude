@@ -10,11 +10,21 @@ const PORT = process.env.PORT || 3001;
 const CLAUDE_API_KEY = process.env.CLAUDE_API_KEY;
 
 
-app.use(cors());
 app.use(express.json());
+
+app.use(cors({
+    origin: [
+      'https://q9g97zpqp2.us-east-2.awsapprunner.com/',
+      'http://localhost:3000' // For local development
+    ]
+  }));
 
 
 const anthropic = new Anthropic({ apiKey: CLAUDE_API_KEY });
+
+app.get('/', (req, res) => {
+    res.send('<h1 style="text-align: center;">Welcome to MasterChef-Claude API Homepage!!</h1><p style="text-align: center;">Please navigate to <a href="https://q9g97zpqp2.us-east-2.awsapprunner.com/">https://q9g97zpqp2.us-east-2.awsapprunner.com/</a> to actually generate a recipe!</p>');
+})
 
 
 app.post('/generate-recipe', async (req, res) => {
