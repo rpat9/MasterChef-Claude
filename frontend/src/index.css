@@ -1,172 +1,207 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 @import "tailwindcss";
 
-* {
-    box-sizing: border-box;
+/* Warm, Earthy Recipe App Design System
+   Palette: Sage greens, warm ambers, cream backgrounds
+   Typography: Clean, readable with organic warmth
+*/
+
+@theme {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-sidebar-background: hsl(var(--sidebar-background));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+  --color-sage: hsl(var(--sage));
+  --color-sage-light: hsl(var(--sage-light));
+  --color-amber: hsl(var(--amber));
+  --color-amber-light: hsl(var(--amber-light));
+  --color-cream: hsl(var(--cream));
+  --color-terracotta: hsl(var(--terracotta));
+  --color-olive: hsl(var(--olive));
 }
 
+@layer base {
+  :root {
+    --background: 45 33% 97%;
+    --foreground: 25 25% 15%;
 
+    --card: 45 40% 99%;
+    --card-foreground: 25 25% 15%;
 
-:root {
-    /* Light Mode - Updated for a warmer, more inviting feel */
-    --color-primary: #5652E5;         /* Vibrant purple-blue */
-    --color-secondary: #3B82F6;       /* Bright blue */
-    --color-accent: #8B5CF6;          /* Soft purple */
-    --color-bg: #F3F4F6;              /* Light gray background */
-    --color-text: #1F2937;            /* Dark gray text */
-    --color-text-secondary: #6B7280;  /* Medium gray text */
-    --card-bg: #FFFFFF;               /* White cards */
-    --header-bg: #F9FAFB;             /* Very light gray header */
-    --button-text-color: #FFFFFF;     /* White text on buttons */
-    --button-hover-primary: #4338CA;  /* Darker purple when hovering */
-    --button-hover-accent: #7C3AED;   /* Darker accent when hovering */
-    --shadow-color: rgba(0, 0, 0, 0.1);
-}
+    --popover: 45 40% 99%;
+    --popover-foreground: 25 25% 15%;
 
-body {
-    background-color: var(--color-bg);
-    color: var(--color-text);
-    font-family: 'Inter', sans-serif;
-    transition: background-color 0.3s, color 0.3s;
-}
+    --primary: 142 35% 35%;
+    --primary-foreground: 45 33% 97%;
 
-/* Dark Mode - Updated for better contrast and visual appeal */
-.dark body{
-    --color-primary: #8B5CF6;         /* Lighter purple */
-    --color-secondary: #60A5FA;       /* Bright blue */
-    --color-accent: #A78BFA;          /* Softer purple */
-    --color-bg: #1F2937;              /* Dark blue-gray background */
-    --color-text: #F9FAFB;            /* Very light gray text */
-    --color-text-secondary: #D1D5DB;  /* Light gray text */
-    --card-bg: #111827;               /* Darker cards */
-    --header-bg: #111827;             /* Same as card-bg for consistency */
-    --button-text-color: #FFFFFF;     /* White text on buttons */
-    --button-hover-primary: #7C3AED;  /* Lighter purple when hovering */
-    --button-hover-accent: #8B5CF6;   /* Lighter accent when hovering */
-    --shadow-color: rgba(0, 0, 0, 0.5);
-    background-color: var(--color-bg);
-    color: var(--color-text);
-}
-  
-  .dark .btn-primary:hover {
-    --button-hover-color: #CE4F4F;
-    background-color: var(--button-hover-primary);
+    --secondary: 35 65% 55%;
+    --secondary-foreground: 25 25% 15%;
+
+    --muted: 45 20% 92%;
+    --muted-foreground: 25 15% 45%;
+
+    --accent: 35 55% 92%;
+    --accent-foreground: 25 25% 15%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 45 33% 97%;
+
+    --border: 45 25% 85%;
+    --input: 45 25% 85%;
+    --ring: 142 35% 35%;
+
+    --radius: 0.75rem;
+
+    /* Custom recipe app tokens */
+    --sage: 142 35% 35%;
+    --sage-light: 142 30% 92%;
+    --amber: 35 65% 55%;
+    --amber-light: 35 55% 92%;
+    --cream: 45 33% 97%;
+    --terracotta: 15 55% 50%;
+    --olive: 85 25% 40%;
+
+    --sidebar-background: 142 30% 96%;
+    --sidebar-foreground: 25 25% 15%;
+    --sidebar-primary: 142 35% 35%;
+    --sidebar-primary-foreground: 45 33% 97%;
+    --sidebar-accent: 142 30% 92%;
+    --sidebar-accent-foreground: 25 25% 15%;
+    --sidebar-border: 142 20% 88%;
+    --sidebar-ring: 142 35% 35%;
   }
 
-  @layer components {
-    .btn-primary {
-      @apply px-6 py-2 rounded-lg bg-[color:var(--color-primary)] text-[color:var(--button-text-color)] hover:bg-[color:var(--button-hover-primary)] transition;
-      box-shadow: 0 2px 5px var(--shadow-color);
-    }
-  
-    .btn-accent {
-      @apply px-6 py-2 rounded-lg bg-[color:var(--color-accent)] text-[color:var(--button-text-color)] hover:bg-[color:var(--button-hover-accent)] transition;
-      box-shadow: 0 2px 5px var(--shadow-color);
-    }
+  .dark {
+    --background: 25 25% 10%;
+    --foreground: 45 33% 95%;
 
-    .btn-hover {
-        @apply cursor-pointer hover:scale-105 transition duration-300 ease-in-out;
-    }
-  
-    .card {
-      @apply p-6 rounded-2xl shadow-md;
-      background-color: var(--card-bg);
-      border: 1px solid rgba(var(--color-secondary), 0.1);
-      box-shadow: 0 4px 6px var(--shadow-color);
-    }
-  
-    .text-secondary {
-      @apply text-[color:var(--color-text-secondary)];
-    }
-  
-    .section-title {
-      @apply text-3xl font-bold mb-8;
-      color: var(--color-secondary);
-    }
+    --card: 25 25% 12%;
+    --card-foreground: 45 33% 95%;
 
-    .info-banner {
-        @apply bg-[color:var(--card-bg)] p-4 rounded-lg mb-4;
-        border-left: 4px solid var(--color-secondary);
-        border-right: 4px solid var(--color-secondary);
-        box-shadow: 0 2px 4px var(--shadow-color);
-    }
+    --popover: 25 25% 12%;
+    --popover-foreground: 45 33% 95%;
 
-    .banner-title {
-        @apply font-bold text-xl mb-2 text-[color:var(--color-primary)];
-    }
-    
-    .banner-text {
-        @apply text-[color:var(--color-secondary)];
-    }
+    --primary: 142 35% 50%;
+    --primary-foreground: 25 25% 10%;
 
-    .progress-header {
-        @apply mb-2 flex justify-between items-center;
-    }
-    
-    .progress-count {
-        @apply text-sm font-medium text-[color:var(--color-secondary)];
-    }
-    
-    .progress-alert {
-        @apply text-sm font-medium text-[color:var(--color-secondary)];
-    }
-    
-    .progress-ready {
-        @apply text-sm font-medium text-[color:var(--color-secondary)];
-    }
+    --secondary: 35 55% 45%;
+    --secondary-foreground: 45 33% 95%;
 
-    .progress-track {
-        @apply w-full rounded-full h-2.5;
-        background-color: color-mix(in srgb, var(--color-text-secondary) 20%, transparent);
-    }
-    
-    .progress-fill {
-        @apply h-2.5 rounded-full transition-all duration-500 ease-out;
-        background-color: var(--color-secondary);
-        box-shadow: 0 1px 3px var(--shadow-color);
-    }
+    --muted: 25 20% 18%;
+    --muted-foreground: 45 20% 60%;
 
-    .loading-container {
-        @apply flex flex-col justify-center items-center my-8 max-w-3xl mx-auto;
-    }
+    --accent: 35 40% 20%;
+    --accent-foreground: 45 33% 95%;
 
-    .loading-spinner-container {
-        @apply flex items-center mb-4;
-    }
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 45 33% 95%;
 
-    .loading-spinner {
-        @apply animate-spin rounded-full h-12 w-12 border-t-2 border-b-2;
-        border-color: var(--color-secondary);
-    }
+    --border: 25 20% 22%;
+    --input: 25 20% 22%;
+    --ring: 142 35% 50%;
 
-    .loading-message {
-        @apply ml-3 text-lg font-medium text-[color:var(--color-text)];
-    }
+    --sage: 142 35% 50%;
+    --sage-light: 142 20% 18%;
+    --amber: 35 55% 45%;
+    --amber-light: 35 40% 20%;
+    --cream: 25 25% 10%;
+    --terracotta: 15 50% 55%;
+    --olive: 85 25% 50%;
 
-    .loading-progress-track {
-        @apply w-full rounded-full h-2 mb-6;
-        background-color: color-mix(in srgb, var(--color-text-secondary) 20%, transparent);
-    }
+    --sidebar-background: 25 25% 8%;
+    --sidebar-foreground: 45 33% 95%;
+    --sidebar-primary: 142 35% 50%;
+    --sidebar-primary-foreground: 25 25% 10%;
+    --sidebar-accent: 142 20% 18%;
+    --sidebar-accent-foreground: 45 33% 95%;
+    --sidebar-border: 25 20% 18%;
+    --sidebar-ring: 142 35% 50%;
+  }
+}
 
-    .loading-progress-fill {
-        @apply h-2 rounded-full transition-all duration-700 ease-out;
-        background-color: var(--color-secondary);
-    }
+@layer base {
+  * {
+    @apply border-border;
+  }
 
-    .chef-tip-container {
-        @apply mt-2 p-4 rounded-lg text-center;
-        background-color: color-mix(in srgb, var(--color-secondary) 10%, transparent);
-        border: 1px solid var(--color-secondary);
-    }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
 
-    .chef-tip-label {
-        @apply text-sm font-medium mb-1;
-        color: var(--color-text);
-    }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+}
 
-    .chef-tip-text {
-        @apply text-sm italic;
-        color: var(--color-text-secondary);
-    }
-    
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
 }
