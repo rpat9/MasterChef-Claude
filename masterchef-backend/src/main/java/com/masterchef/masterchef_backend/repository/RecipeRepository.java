@@ -32,9 +32,10 @@ public interface RecipeRepository extends JpaRepository<Recipe, UUID> {
 
     /**
      * Search recipes by tags (using PostgreSQL array contains operator)
+     * TODO: Fix MEMBER OF syntax for Hibernate 7.x
      */
-    @Query("SELECT r FROM Recipe r WHERE r.user.id = :userId AND :tag MEMBER OF r.tags")
-    List<Recipe> findByUserIdAndTagsContaining(@Param("userId") UUID userId, @Param("tag") String tag);
+    // @Query("SELECT r FROM Recipe r WHERE r.user.id = :userId AND :tag MEMBER OF r.tags")
+    // List<Recipe> findByUserIdAndTagsContaining(@Param("userId") UUID userId, @Param("tag") String tag);
 
     /**
      * Count saved recipes for a user

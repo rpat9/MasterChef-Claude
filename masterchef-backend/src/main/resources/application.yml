@@ -25,12 +25,6 @@ spring:
     locations: classpath:db/migration
     baseline-on-migrate: true
 
-  # ── Jackson ─────────────────────────────────────────────────────
-  jackson:
-    default-property-inclusion: non_null
-    serialization:
-      write-dates-as-timestamps: false
-
 # ── Server ──────────────────────────────────────────────────────
 server:
   port: 8080

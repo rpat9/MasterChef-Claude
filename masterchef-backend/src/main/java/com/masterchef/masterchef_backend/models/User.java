@@ -39,7 +39,7 @@ public class User {
     @Column(name = "password_hash", nullable = false, length = 255)
     private String passwordHash;
 
-    @Column(name = "name", length = 100)
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
 
     @Column(name = "dietary_preferences", columnDefinition = "TEXT[]")
