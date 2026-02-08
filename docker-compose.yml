@@ -1,0 +1,76 @@
+# Brief overview on our local infrastructure stack
+#   PostgreSQL database is named masterchef and runs on port 5432
+#   Ollama runs mistral 7B locally. On first run it will take about 10mins or more. Port is 11434
+#   LocalStack runs on port 4566 which emulates AWS S3, AWS CloudWatch, AWS Secrets Manager, etc
+#   Lastly we have volumes just do data persists even if we do docker compose down.
+
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: masterchef-postgres
+    environment:
+      POSTGRES_DB: masterchef
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev -d masterchef"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Ollama (Local LLM - Mistral 7B)
+  ollama:
+    image: ollama/ollama:latest
+    container_name: masterchef-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # LocalStack (AWS Services Emulation)
+  # Services: S3, CloudWatch Logs, Secrets Manager
+  localstack:
+    image: localstack/localstack:latest
+    container_name: masterchef-localstack
+    ports:
+      - "4566:4566"  # LocalStack edge port
+      - "4571:4571"  # LocalStack health check
+    environment:
+      - SERVICES=s3,cloudwatch,secretsmanager,iam
+      - DEBUG=1
+      - DATA_DIR=/var/lib/localstack/data
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - localstack_data:/var/lib/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+# Named Volumes (persist data across container restarts)
+volumes:
+  postgres_data:
+    driver: local
+  ollama_data:
+    driver: local
+  localstack_data:
+    driver: local
+
+# Network (all services can communicate via service name)
+networks:
+  default:
+    name: masterchef-network

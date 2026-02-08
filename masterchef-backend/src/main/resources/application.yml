@@ -2,6 +2,13 @@ spring:
   application:
     name: masterchef-backend
 
+  # ── Database Connection ─────────────────────────────────────────
+  datasource:
+    url: jdbc:postgresql://localhost:5432/masterchef
+    username: dev
+    password: dev
+    driver-class-name: org.postgresql.Driver
+
   # ── JPA / Hibernate ─────────────────────────────────────────────
   jpa:
     hibernate:
