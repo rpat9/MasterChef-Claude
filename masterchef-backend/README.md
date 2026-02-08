@@ -158,8 +158,8 @@ The maintainer chooses not to deploy to avoid recurring costs (~$50-100/month fo
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/rpat9/MasterChef-Claude.git
-cd MasterChef-Claude/masterchef-backend
+git clone https://github.com/rpat9/MasterChef.git
+cd MasterChef/masterchef-backend
 
 # 2. Start infrastructure (PostgreSQL, Ollama, LocalStack)
 docker-compose up -d
