@@ -1,0 +1,106 @@
+spring:
+  application:
+    name: masterchef-backend
+
+  # ── JPA / Hibernate ─────────────────────────────────────────────
+  jpa:
+    hibernate:
+      ddl-auto: validate          # Flyway owns the schema
+    open-in-view: false            # Avoid lazy-loading anti-pattern
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: false
+
+  # ── Flyway migrations ──────────────────────────────────────────
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+  # ── Jackson ─────────────────────────────────────────────────────
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false
+
+# ── Server ──────────────────────────────────────────────────────
+server:
+  port: 8080
+  error:
+    include-message: always
+    include-binding-errors: always
+
+# ── Actuator ────────────────────────────────────────────────────
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+  metrics:
+    tags:
+      application: masterchef-backend
+
+# ── OpenAPI / Springdoc ─────────────────────────────────────────
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+
+# ── Logging ─────────────────────────────────────────────────────
+logging:
+  level:
+    root: INFO
+    com.masterchef: DEBUG
+    org.hibernate.SQL: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# ── LLM Configuration ──────────────────────────────────────────
+llm:
+  ollama:
+    base-url: http://localhost:11434
+    model: mistral
+    timeout-seconds: 30
+  cache:
+    ttl-hours: 24
+    max-size: 1000
+
+# ── AWS (LocalStack by default) ────────────────────────────────
+aws:
+  endpoint: http://localhost:4566
+  region: us-east-1
+  s3:
+    bucket-name: masterchef-recipes
+  cloudwatch:
+    log-group: /masterchef/backend
+  secrets-manager:
+    enabled: true
+
+# ── Resilience4j ────────────────────────────────────────────────
+resilience4j:
+  circuitbreaker:
+    instances:
+      llm-circuit:
+        register-health-indicator: true
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 3
+  retry:
+    instances:
+      llm-retry:
+        max-attempts: 3
+        wait-duration: 2s
+        exponential-backoff-multiplier: 2
+  ratelimiter:
+    instances:
+      recipe-generation:
+        limit-for-period: 10
+        limit-refresh-period: 1m
+        timeout-duration: 0s
