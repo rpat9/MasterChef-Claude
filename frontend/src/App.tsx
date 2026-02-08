@@ -10,7 +10,20 @@ import SavedRecipes from './pages/SavedRecipes';
 import Profile from './pages/Profile';
 import NotFound from './pages/NotFound';
 
-const queryClient = new QueryClient();
+// TanStack Query Client Configuration
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            staleTime: 1000 * 60 * 5, // 5 minutes
+            gcTime: 1000 * 60 * 10, // 10 minutes (formerly cacheTime)
+            retry: 1,
+            refetchOnWindowFocus: false,
+        },
+        mutations: {
+            retry: 1,
+        },
+    },
+});
 
 const App = () => (
     <QueryClientProvider client={queryClient}>
