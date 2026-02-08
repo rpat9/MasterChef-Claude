@@ -2,7 +2,7 @@
 #   PostgreSQL database is named masterchef and runs on port 5432
 #   Ollama runs mistral 7B locally. On first run it will take about 10mins or more. Port is 11434
 #   LocalStack runs on port 4566 which emulates AWS S3, AWS CloudWatch, AWS Secrets Manager, etc
-#   Lastly we have volumes just do data persists even if we do docker compose down.
+#   Lastly we have volumes just so data persists even if we do docker compose down.
 
 version: '3.8'
 
