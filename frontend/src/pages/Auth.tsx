@@ -78,7 +78,7 @@ const Auth = () => {
                         <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center mx-auto mb-4">
                             <ChefHat className="h-8 w-8 text-primary-foreground" />
                         </div>
-                        <CardTitle className="font-display text-2xl">Welcome to RecipeAI</CardTitle>
+                        <CardTitle className="font-display text-2xl">Welcome to MasterChef</CardTitle>
                         <CardDescription>
                             Sign in to your account or create a new one
                         </CardDescription>

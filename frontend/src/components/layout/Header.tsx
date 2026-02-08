@@ -30,7 +30,7 @@ export function Header({ isAuthenticated = false, userName, onLogout }: HeaderPr
                         <ChefHat className="h-6 w-6 text-primary-foreground" />
                     </div>
                     <span className="font-display text-xl font-semibold hidden sm:block">
-                        RecipeAI
+                        MasterChef
                     </span>
                 </Link>
 

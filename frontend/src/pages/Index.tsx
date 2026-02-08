@@ -98,7 +98,7 @@ const Index = () => {
             <footer className="py-8 border-t border-border">
                 <div className="container flex items-center justify-center gap-2 text-sm text-muted-foreground">
                     <ChefHat className="h-4 w-4" />
-                    <span>RecipeAI — Made with love for home cooks</span>
+                    <span>MasterChef — Made with love for home cooks</span>
                 </div>
             </footer>
         </div>
