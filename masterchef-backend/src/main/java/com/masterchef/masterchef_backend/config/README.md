@@ -12,26 +12,38 @@ Provides a configured `RestTemplate` bean for HTTP communication with external s
 @Bean
 public RestTemplate restTemplate() {
     SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-    factory.setConnectTimeout(10_000);  // 10 seconds
-    factory.setReadTimeout(30_000);     // 30 seconds
+    factory.setConnectTimeout(10_000);   // 10 seconds
+    factory.setReadTimeout(120_000);     // 120 seconds (LLM generation)
     return new RestTemplate(factory);
 }
 ```
 
 ### Timeout Strategy
 - **Connect Timeout (10s)** - Fail fast if service is unreachable
-- **Read Timeout (30s)** - Allow time for LLM inference (Mistral 7B can take 10-20s for long responses)
+- **Read Timeout (120s)** - Allow sufficient time for LLM inference (Mistral 7B can take 15-30s for recipe generation)
 
 ### Why Not RestTemplateBuilder?
 Spring Boot 4.x has different auto-configuration than 3.x. Using `SimpleClientHttpRequestFactory` directly avoids compatibility issues.
 
-## Future Configs (Planned)
+## SecurityConfig ✅
 
-### SecurityConfig
-- JWT token validation
-- Spring Security filter chain
-- Public endpoints: /api/v1/auth/*, /actuator/health
-- Protected endpoints: /api/v1/recipes/*
+Spring Security configuration with JWT authentication.
+
+### Implementation
+- JWT token validation via JwtAuthenticationFilter
+- Spring Security filter chain with stateless session management
+- Public endpoints: `/api/v1/auth/**`, `/actuator/**`, `/swagger-ui/**`
+- Protected endpoints: All `/api/v1/recipes/**` require valid JWT
+- BCrypt password encoder with cost factor 12
+- CORS configuration for local development
+
+### Token Configuration
+- Access tokens: 15-minute expiration
+- Refresh tokens: 7-day expiration
+- Signing algorithm: HS512
+- Secret key: Base64-encoded from application.yml
+
+## Future Configs (Planned)
 
 ### Resilience4jConfig
 - Circuit breaker for LLM calls (fail open after 5 consecutive errors)

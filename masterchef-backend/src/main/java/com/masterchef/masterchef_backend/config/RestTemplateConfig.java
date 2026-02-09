@@ -15,7 +15,7 @@ public class RestTemplateConfig {
     public RestTemplate restTemplate() {
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
         factory.setConnectTimeout(10000); // 10 seconds
-        factory.setReadTimeout(30000);    // 30 seconds
+        factory.setReadTimeout(120000);   // 120 seconds (LLM generation can be slow)
         
         return new RestTemplate(factory);
     }

@@ -32,12 +32,17 @@ com.masterchef.masterchef_backend/
 - DTO layer for API contracts
 - LLM client abstraction (Strategy pattern)
 - Ollama HTTP client implementation
-- Configuration beans
+- Configuration beans (RestTemplateConfig, SecurityConfig)
+- JWT authentication with Spring Security (JwtTokenProvider, JwtAuthenticationFilter, UserDetailsServiceImpl)
+- Service layer (AuthService, RecipeService)
+- REST controllers (AuthController, RecipeController)
+- End-to-end testing script
 
-🚧 **In Progress:**
-- Service layer (LlmCacheService, LlmOrchestrator, RecipeService)
-- JWT authentication & Spring Security
-- REST controllers
+🚧 **Planned:**
+- LLM caching layer (SHA-256 content-addressable caching)
+- Recipe management endpoints (save, retrieve, search)
+- Resilience patterns (circuit breaker, retry, rate limiting)
+- AWS integration (S3, CloudWatch via LocalStack)
 - Global exception handling
 
 ## Key Design Decisions

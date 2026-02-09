@@ -26,123 +26,149 @@
 
 ## 🎯 Overview
 
-MasterChef Backend is a **production-grade REST API** that generates personalized recipes using AI (local LLM inference), with full user authentication, recipe management, and cost-optimized caching.
+MasterChef Backend is a **Spring Boot REST API** that generates AI-powered recipes using local LLM inference (Ollama/Mistral 7B), with JWT authentication and PostgreSQL persistence. Built with production-grade patterns while maintaining zero cloud costs during development.
 
-### Key Capabilities
+### What's Working Now
 
-- 🔐 **JWT Authentication** - Secure, stateless auth with Spring Security
-- 🤖 **AI Recipe Generation** - Local LLM (Ollama/Mistral 7B) with no API costs
-- 💾 **Smart Caching** - SHA-256 content hashing reduces redundant LLM calls
-- 📊 **Observability** - Structured logging, metrics, and health checks
-- ☁️ **AWS-Ready** - Full Terraform IaC; works with LocalStack locally
-- 🔄 **Resilience** - Circuit breakers, retries, rate limiting
-- 📖 **Auto-Generated Docs** - OpenAPI 3.0 spec via Springdoc
+- 🔐 **JWT Authentication** - User registration, login, token refresh with Spring Security
+- 🤖 **AI Recipe Generation** - Local LLM inference with Mistral 7B (no API costs)
+- 📊 **Audit Trail** - Complete tracking of LLM requests, responses, and performance metrics
+- 🗄️ **Database Persistence** - PostgreSQL with Flyway migrations for schema management
+- ✅ **Testing** - End-to-end test suite validating the complete flow
+
+### Core Architecture
+
+- **Java 21** + **Spring Boot 4.0.2** for modern enterprise Java development
+- **PostgreSQL 16** for reliable data persistence
+- **Ollama** for local AI inference (Mistral 7B, ~4.4GB model)
+- **Docker Compose** for reproducible local development environment
+- **Stateless JWT** authentication (15-minute access tokens, 7-day refresh tokens)
 
 ---
 
 ## 🏗️ Why This Architecture?
 
-### Design Principles
+### Design Philosophy
 
-1. **Production-First** - Not a toy project. Every pattern (security, caching, observability) is enterprise-grade
-2. **Cloud-Native** - Designed for AWS ECS deployment with full Terraform definitions
-3. **Cost-Aware** - Local LLM inference + aggressive caching = $0 AI costs
-4. **Developer Experience** - `docker-compose up` gets you a working system in seconds
+1. **Production Patterns** - Enterprise-grade security, database migrations, structured logging, and audit trails
+2. **Zero-Cost AI** - Local LLM inference with Ollama eliminates API costs while maintaining quality
+3. **Cloud-Ready** - Designed for AWS deployment but runs entirely locally during development
+4. **Simple First** - Core functionality built solidly before adding complexity like caching and resilience patterns
+
+### Current Focus
+
+The system prioritizes **core functionality done right**:
+- Secure authentication with industry-standard JWT
+- Real AI recipe generation with structured output
+- Complete audit trail for debugging and metrics
+- Reproducible local environment with Docker
 
 ### Why Not Deployed?
 
-This system is **deployment-ready** for AWS (ECS, RDS, S3, CloudWatch). The infrastructure is fully defined in Terraform and validated. **Anyone can clone and deploy** to their own AWS account.
+This system is **deployment-ready** for AWS (designed for ECS, RDS, and S3). The architecture supports production deployment to any cloud provider. 
 
-The maintainer chooses not to deploy to avoid recurring costs (~$50-100/month for minimal traffic). Instead, all AWS services are emulated locally using **LocalStack**, proving AWS competency without burning money.
+**The maintainer chooses not to deploy to avoid recurring costs** (~$50-100/month for minimal traffic). This demonstrates production-ready engineering practices while maintaining zero operational expenses.
 
-**Translation**: *"I know how to deploy to AWS. I'm choosing not to pay for it."*
+**Translation**: *"I know how to deploy to production. I'm choosing not to pay for it."*
 
 ---
 
 ## 🚀 Tech Stack
 
-### Core
+### Core Technologies
 
 | Component            | Technology               | Purpose                                    |
 |----------------------|--------------------------|--------------------------------------------|
-| **Language**         | Java 21                  | Virtual threads, records, pattern matching |
-| **Framework**        | Spring Boot 4.0.2        | Enterprise web framework                   |
-| **Security**         | Spring Security + JWT    | Stateless authentication                   |
+| **Language**         | Java 21                  | Modern Java with virtual threads, records  |
+| **Framework**        | Spring Boot 4.0.2        | Enterprise web application framework       |
+| **Security**         | Spring Security + JWT    | Stateless authentication and authorization |
 | **Database**         | PostgreSQL 16            | Primary data store                         |
-| **Migrations**       | Flyway                   | Version-controlled schema changes          |
+| **Migrations**       | Flyway                   | Version-controlled schema evolution        |
+| **Password Hashing** | BCrypt                   | Secure password storage                    |
 
-### AI & Caching
+### AI & Integration
 
 | Component            | Technology               | Purpose                                    |
 |----------------------|--------------------------|--------------------------------------------|
-| **LLM Runtime**      | Ollama (Mistral 7B)      | Local AI inference                         |
-| **Cache Store**      | PostgreSQL (in-table)    | Content-addressable LLM response cache     |
-| **Hashing**          | SHA-256                  | Prompt deduplication                       |
+| **LLM Runtime**      | Ollama (Mistral 7B)      | Local AI inference (zero API costs)        |
+| **HTTP Client**      | RestTemplate             | Communication with Ollama API              |
+| **JSON Processing**  | Jackson ObjectMapper     | Recipe parsing and serialization           |
 
-### AWS Integration
+### Infrastructure
 
-| Component            | Technology               | Local Equivalent                           |
+| Component            | Technology               | Purpose                                    |
 |----------------------|--------------------------|--------------------------------------------|
-| **Object Storage**   | AWS S3                   | LocalStack S3                              |
-| **Logging**          | CloudWatch Logs          | LocalStack CloudWatch                      |
-| **Secrets**          | Secrets Manager          | LocalStack Secrets Manager                 |
-| **Deployment**       | ECS Fargate              | Docker Compose (local)                     |
-| **Database**         | RDS PostgreSQL           | PostgreSQL container (local)               |
+| **Containerization** | Docker + Docker Compose  | Local development environment              |
+| **Database Driver**  | PostgreSQL JDBC          | Database connectivity                      |
+| **Connection Pool**  | HikariCP                 | Database connection pooling                |
 
 ### Observability
 
 | Component            | Technology               | Purpose                                    |
 |----------------------|--------------------------|--------------------------------------------|
-| **Metrics**          | Micrometer               | Prometheus-compatible metrics              |
 | **Health Checks**    | Spring Actuator          | `/actuator/health` endpoints               |
-| **Logging**          | SLF4J + Logback          | Structured JSON logs                       |
-| **Tracing**          | MDC (Mapped Diagnostic)  | Request correlation                        |
+| **Logging**          | SLF4J + Logback          | Structured application logging             |
+| **Audit Trail**      | Database tables          | LLM request/response tracking              |
 
-### Resilience
+### Development Tools
 
 | Component            | Technology               | Purpose                                    |
 |----------------------|--------------------------|--------------------------------------------|
-| **Circuit Breaker**  | Resilience4j             | Fail-fast on LLM outages                   |
-| **Retry**            | Resilience4j             | Handle transient failures                  |
-| **Rate Limiting**    | Resilience4j             | Prevent abuse                              |
-| **Timeouts**         | Resilience4j             | Prevent thread starvation                  |
+| **Build Tool**       | Maven                    | Dependency management and build automation |
+| **Testing**          | Bash scripts             | End-to-end integration testing             |
+| **Code Quality**     | Lombok                   | Boilerplate reduction                      |
 
 ---
 
 ## ✨ Features
 
-### Authentication & User Management
+### ✅ Currently Implemented
 
-- ✅ User registration with email validation
-- ✅ Secure password hashing (BCrypt)
-- ✅ JWT token generation (access + refresh tokens)
-- ✅ Token-based API authentication
-- ✅ User profile management
-- ✅ Dietary preference storage
+#### Authentication & Security
+- User registration with email validation
+- Secure password hashing (BCrypt, cost factor 12)
+- JWT token generation (access + refresh tokens)
+- Token-based API authentication with Spring Security
+- Access tokens: 15-minute expiration
+- Refresh tokens: 7-day expiration
 
-### Recipe Generation
+#### Recipe Generation
+- AI-powered recipe creation from ingredients using local LLM (Ollama/Mistral 7B)
+- Dietary preference support (vegan, gluten-free, keto, etc.)
+- Structured recipe output (title, description, instructions, nutrition, ingredients)
+- Generation history tracking with full audit trail
+- Token usage and latency metrics per generation
+- Configurable serving sizes and difficulty levels
 
-- ✅ AI-powered recipe creation from 3-15 ingredients
-- ✅ Dietary preference filtering (vegan, gluten-free, keto, etc.)
-- ✅ Structured output (title, description, instructions, nutrition)
-- ✅ Response caching (40%+ hit rate in testing)
-- ✅ Cost tracking (tokens used, estimated $)
-- ✅ Generation history per user
+#### Observability
+- Health check endpoints (Spring Actuator)
+- Structured logging with request correlation
+- Database connection monitoring
 
-### Recipe Management
+### 🚧 Planned Features
 
-- ✅ Save recipes to personal collection
-- ✅ Retrieve all saved recipes
-- ✅ Remove recipes from collection
-- ✅ Search/filter by ingredients or tags
-- ✅ Export to S3 (via LocalStack)
+#### Smart Caching
+- SHA-256 content-addressable caching for LLM responses
+- Cache hit rate tracking
+- TTL-based cache expiration
 
-### Observability
+#### Recipe Management
+- Save/unsave recipes to personal collection
+- Retrieve saved recipes
+- Search and filter by ingredients or tags
+- Export recipes to S3
 
-- ✅ Health checks for all dependencies
-- ✅ Custom metrics (latency, cache hit rate, token usage)
-- ✅ Structured logging with request correlation
-- ✅ Auto-generated OpenAPI documentation
+#### Resilience & Reliability
+- Circuit breaker for LLM failures
+- Retry logic with exponential backoff
+- Rate limiting per user
+- Request timeouts
+
+#### AWS Integration
+- S3 for recipe exports
+- CloudWatch for logs and metrics
+- Secrets Manager for credentials
+- ECS Fargate deployment
 
 ---
 
@@ -161,11 +187,12 @@ The maintainer chooses not to deploy to avoid recurring costs (~$50-100/month fo
 git clone https://github.com/rpat9/MasterChef.git
 cd MasterChef/masterchef-backend
 
-# 2. Start infrastructure (PostgreSQL, Ollama, LocalStack)
+# 2. Start infrastructure (PostgreSQL, Ollama)
 docker-compose up -d
 
-# 3. Wait for Ollama to pull the model (first time only, ~5 minutes)
+# 3. Wait for Ollama to pull Mistral model (first time only, ~5 minutes)
 docker-compose logs -f ollama
+# Look for: "success"
 
 # 4. Run database migrations
 ./mvnw flyway:migrate
@@ -179,9 +206,19 @@ curl http://localhost:8080/actuator/health
 
 The API will be available at `http://localhost:8080`
 
-### Swagger UI
+### Running the Test Suite
 
-Visit `http://localhost:8080/swagger-ui.html` for interactive API documentation.
+```bash
+# Run end-to-end test script
+./test-recipe-generation.sh
+```
+
+This script tests:
+- ✓ JWT authentication (registration and login)
+- ✓ Protected endpoint authorization
+- ✓ Recipe generation with Ollama
+- ✓ Database persistence
+- ✓ Response metadata (tokens, latency)
 
 ---
 
@@ -194,62 +231,48 @@ masterchef-backend/
 │   │   ├── java/com/masterchef/masterchef_backend/
 │   │   │   ├── config/              # Configuration beans
 │   │   │   │   ├── SecurityConfig.java        # Spring Security + JWT
-│   │   │   │   ├── AwsConfig.java             # S3, CloudWatch, Secrets
-│   │   │   │   ├── ResilienceConfig.java      # Circuit breaker, retry
-│   │   │   │   └── WebConfig.java             # CORS, request logging
+│   │   │   │   └── RestTemplateConfig.java    # HTTP client config
 │   │   │   ├── controller/          # REST API endpoints
 │   │   │   │   ├── AuthController.java        # /api/v1/auth/*
-│   │   │   │   ├── UserController.java        # /api/v1/users/*
-│   │   │   │   ├── RecipeController.java      # /api/v1/recipes/*
-│   │   │   │   └── GlobalExceptionHandler.java
+│   │   │   │   └── RecipeController.java      # /api/v1/recipes/*
 │   │   │   ├── service/             # Business logic
-│   │   │   │   ├── AuthService.java           # Registration, login
-│   │   │   │   ├── UserService.java           # Profile management
-│   │   │   │   ├── RecipeService.java         # Recipe generation
-│   │   │   │   ├── LlmOrchestrator.java       # LLM routing + caching
-│   │   │   │   ├── LlmCacheService.java       # Cache operations
-│   │   │   │   └── StorageService.java        # S3 operations
-│   │   │   ├── security/            # JWT & Auth
-│   │   │   │   ├── JwtTokenProvider.java      # Token generation
-│   │   │   │   ├── JwtAuthenticationFilter.java
-│   │   │   │   └── UserDetailsServiceImpl.java
+│   │   │   │   ├── AuthService.java           # Registration, login, token refresh
+│   │   │   │   └── RecipeService.java         # Recipe generation orchestration
+│   │   │   ├── security/            # JWT & Authentication
+│   │   │   │   ├── JwtTokenProvider.java      # Token generation/validation
+│   │   │   │   ├── JwtAuthenticationFilter.java  # Request authentication
+│   │   │   │   └── UserDetailsServiceImpl.java   # User loading
 │   │   │   ├── repository/          # Data access (JPA)
 │   │   │   │   ├── UserRepository.java
 │   │   │   │   ├── RecipeRepository.java
-│   │   │   │   ├── RecipeGenerationRepository.java
-│   │   │   │   └── LlmCacheRepository.java
-│   │   │   ├── model/               # JPA entities
+│   │   │   │   └── RecipeGenerationRepository.java
+│   │   │   ├── models/              # JPA entities
 │   │   │   │   ├── User.java
 │   │   │   │   ├── Recipe.java
-│   │   │   │   ├── RecipeGeneration.java
-│   │   │   │   └── LlmCache.java
+│   │   │   │   └── RecipeGeneration.java
 │   │   │   ├── dto/                 # Request/response objects
-│   │   │   │   ├── auth/            # Auth DTOs
-│   │   │   │   ├── recipe/          # Recipe DTOs
-│   │   │   │   └── user/            # User DTOs
-│   │   │   ├── exception/           # Custom exceptions
+│   │   │   │   ├── LoginRequest.java
+│   │   │   │   ├── RegisterRequest.java
+│   │   │   │   ├── AuthResponse.java
+│   │   │   │   ├── TokenRefreshRequest.java
+│   │   │   │   ├── TokenRefreshResponse.java
+│   │   │   │   ├── RecipeRequest.java
+│   │   │   │   ├── RecipeResponse.java
+│   │   │   │   ├── LlmRequest.java
+│   │   │   │   └── LlmResponse.java
 │   │   │   └── llm/                 # LLM abstraction
 │   │   │       ├── LlmClient.java (interface)
-│   │   │       ├── OllamaClient.java
-│   │   │       └── MockLlmClient.java
+│   │   │       └── OllamaClient.java
 │   │   └── resources/
-│   │       ├── application.yml               # Main config
-│   │       ├── application-local.yml         # Local overrides
+│   │       ├── application.yml               # Main configuration
 │   │       └── db/migration/                 # Flyway SQL scripts
-│   └── test/                        # Unit & integration tests
-├── infrastructure/
-│   ├── docker/
-│   │   └── docker-compose.yml       # Local development stack
-│   ├── terraform/
-│   │   ├── main.tf                  # AWS ECS deployment
-│   │   ├── modules/                 # Terraform modules
-│   │   └── environments/            # Environment configs
-│   └── localstack/
-│       └── init-localstack.sh       # LocalStack initialization
+│   │           └── V1__create_initial_schema.sql
+│   └── test/                        # Tests (to be implemented)
 ├── docs/
 │   ├── ARCHITECTURE.md              # System design deep dive
-│   ├── SCOPE.md                     # Feature scope document
-│   └── API.md                       # API endpoint reference
+│   └── SCOPE.md                     # Feature scope document
+├── docker-compose.yml               # Local infrastructure stack
+├── test-recipe-generation.sh        # E2E test script
 ├── pom.xml                          # Maven dependencies
 └── README.md                        # This file
 ```
@@ -264,32 +287,55 @@ masterchef-backend/
 http://localhost:8080/api/v1
 ```
 
-### Authentication Endpoints
+### Currently Implemented Endpoints
+
+#### Authentication
 
 | Method | Endpoint               | Description                  | Auth Required |
 |--------|------------------------|------------------------------|---------------|
 | POST   | `/auth/register`       | Register new user            | No            |
 | POST   | `/auth/login`          | Login and get JWT            | No            |
 | POST   | `/auth/refresh`        | Refresh access token         | Yes (Refresh) |
-| POST   | `/auth/logout`         | Logout (invalidate token)    | Yes           |
 
-### User Endpoints
+#### Recipe Generation
 
-| Method | Endpoint                      | Description                  | Auth Required |
-|--------|-------------------------------|------------------------------|---------------|
-| GET    | `/users/profile`              | Get current user profile     | Yes           |
-| PUT    | `/users/profile`              | Update user profile          | Yes           |
-| PUT    | `/users/dietary-preferences`  | Update dietary preferences   | Yes           |
+| Method | Endpoint                 | Description                       | Auth Required |
+|--------|--------------------------|-----------------------------------|---------------|
+| POST   | `/recipes/generate`      | Generate recipe from ingredients  | Yes           |
 
-### Recipe Endpoints
+#### Health & Monitoring
 
 | Method | Endpoint                 | Description                  | Auth Required |
 |--------|--------------------------|------------------------------|---------------|
-| POST   | `/recipes/generate`      | Generate recipe from ingredients | Yes       |
-| GET    | `/recipes/history`       | Get generation history       | Yes           |
-| GET    | `/recipes/saved`         | Get all saved recipes        | Yes           |
-| POST   | `/recipes/saved`         | Save a recipe                | Yes           |
-| DELETE | `/recipes/saved/{id}`    | Remove saved recipe          | Yes           |
+| GET    | `/actuator/health`       | Application health status    | No            |
+| GET    | `/actuator/info`         | Application information      | No            |
+
+### Example: Register User
+
+**Request:**
+```bash
+curl -X POST http://localhost:8080/api/v1/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "John Doe",
+    "email": "john@example.com",
+    "password": "securepass123"
+  }'
+```
+
+**Response:**
+```json
+{
+  "userId": "8d99355d-3294-4035-b9fe-bdf58b813c14",
+  "email": "john@example.com",
+  "name": "John Doe",
+  "accessToken": "eyJhbGciOiJIUzUxMiJ9...",
+  "refreshToken": "eyJhbGciOiJIUzUxMiJ9...",
+  "tokenType": "Bearer",
+  "expiresIn": 900,
+  "issuedAt": "2026-02-09T17:30:00Z"
+}
+```
 
 ### Example: Generate Recipe
 
@@ -299,64 +345,59 @@ curl -X POST http://localhost:8080/api/v1/recipes/generate \
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
-    "ingredients": ["chicken", "garlic", "butter", "thyme"],
+    "ingredients": ["chicken", "garlic", "olive oil", "lemon", "thyme"],
     "dietaryPreferences": ["gluten-free"],
-    "servings": 4
+    "servings": 4,
+    "difficulty": "easy",
+    "maxTimeMinutes": 45
   }'
 ```
 
 **Response:**
 ```json
 {
-  "id": "550e8400-e29b-41d4-a716-446655440000",
-  "title": "Garlic Butter Chicken with Herbs",
-  "description": "Tender, juicy chicken thighs with crispy skin...",
+  "id": "82c09abf-4687-4f5e-81fa-85343f4b3ae3",
+  "title": "Lemon Thyme Chicken",
+  "description": "A simple and delicious recipe using chicken, garlic, olive oil, lemon, and thyme.",
   "prepTime": 15,
   "cookTime": 30,
   "totalTime": 45,
   "servings": 4,
   "difficulty": "easy",
-  "ingredients": [
-    { "name": "chicken thighs", "amount": "4", "unit": "pieces" },
-    { "name": "garlic", "amount": "6", "unit": "cloves" },
-    { "name": "butter", "amount": "4", "unit": "tbsp" },
-    { "name": "fresh thyme", "amount": "2", "unit": "sprigs" }
-  ],
-  "instructions": [
-    "Preheat oven to 425°F (220°C).",
-    "Season chicken generously with salt and pepper.",
-    "...",
-  ],
-  "tags": ["Chicken", "Gluten-Free", "Easy"],
-  "nutritionInfo": {
-    "calories": 380,
-    "protein": 32,
-    "carbs": 2,
-    "fat": 27
-  },
-  "isSaved": false,
-  "generatedAt": "2026-02-07T14:23:01Z"
+  "cuisine": "Italian",
+  "ingredientsUsed": ["chicken", "garlic", "olive oil", "lemon", "thyme"],
+  "instructions": "[\"Step 1: Preheat the oven...\", \"Step 2: Season the chicken...\"]",
+  "ingredients": "[{\"name\":\"chicken\",\"amount\":\"500\",\"unit\":\"g\"}]",
+  "nutritionInfo": "{\"calories\":350,\"protein\":30,\"carbs\":20,\"fat\":15}",
+  "tags": ["Quick", "Healthy"],
+  "isSaved": true,
+  "createdAt": "2026-02-09T17:34:19Z",
+  "metadata": {
+    "model": "mistral",
+    "tokensUsed": 363,
+    "latencyMs": 19435,
+    "cached": false,
+    "generatedAt": "2026-02-09T17:34:19Z"
+  }
 }
 ```
 
-For complete API documentation, visit `/swagger-ui.html` when the application is running.
-
 ---
 
-## ☁️ AWS Deployment
+## ☁️ AWS Deployment (Planned)
 
-### Architecture
+### Target Architecture
 
-The system is designed for **AWS ECS (Fargate)** with the following components:
+The system is designed for **AWS ECS (Fargate)** deployment with:
 
-- **ECS Fargate** - Containerized application (256 CPU, 512 MB memory)
+- **ECS Fargate** - Containerized Spring Boot application
 - **Application Load Balancer** - HTTPS termination and routing
-- **RDS PostgreSQL** - Managed database (db.t3.micro)
+- **RDS PostgreSQL** - Managed database
 - **S3** - Recipe exports and static assets
 - **CloudWatch** - Logs and metrics
-- **Secrets Manager** - Database credentials and JWT secrets
+- **Secrets Manager** - Secure credential storage
 
-### Cost Estimate (if deployed)
+### Estimated Monthly Cost
 
 | Service          | Configuration    | Monthly Cost (Estimate) |
 |------------------|------------------|-------------------------|
@@ -367,162 +408,145 @@ The system is designed for **AWS ECS (Fargate)** with the following components:
 | CloudWatch       | Logs + metrics   | ~$5                     |
 | **Total**        |                  | **~$56/month**          |
 
-*Note: Actual costs depend on traffic, data transfer, and usage patterns.*
-
-### Deployment Steps
-
-```bash
-# 1. Configure AWS credentials
-export AWS_ACCESS_KEY_ID=your_key
-export AWS_SECRET_ACCESS_KEY=your_secret
-export AWS_REGION=us-east-1
-
-# 2. Initialize Terraform
-cd infrastructure/terraform
-terraform init
-
-# 3. Review planned changes
-terraform plan
-
-# 4. Deploy infrastructure
-terraform apply
-
-# 5. Build and push Docker image to ECR
-./scripts/deploy.sh
-```
-
-### Why LocalStack?
-
-LocalStack emulates AWS services locally, allowing us to:
-- ✅ Develop and test AWS integrations without real cloud resources
-- ✅ Validate Terraform definitions before deployment
-- ✅ Prove AWS SDK competency at zero cost
-- ✅ Enable anyone to run the full system locally
-
-**The infrastructure code is identical** whether targeting LocalStack or real AWS—only the endpoint URLs change.
+*Note: This is deployment-ready infrastructure that anyone can deploy to their own AWS account. The maintainer chooses not to deploy to avoid recurring costs, demonstrating zero-cost local development while maintaining production-ready code quality.*
 
 ---
 
 ## 🛠️ Architecture Deep Dive
 
-### LLM Abstraction Layer
+### Current Implementation
 
-The system uses a **pluggable LLM client interface** for flexibility:
+#### LLM Integration
 
-```java
-public interface LlmClient {
-    LlmResponse generate(PromptRequest request);
-    boolean isAvailable();
-    String getModelName();
-    int estimateTokens(String text);
-}
-```
+The system uses **Ollama** for local LLM inference with the Mistral 7B model:
+- Zero API costs (runs locally)
+- 120-second timeout for generation
+- Token estimation based on character count
+- Full request/response audit trail in `recipe_generations` table
 
-**Implementations:**
-- `OllamaClient` - Production implementation for local Mistral 7B
-- `MockLlmClient` - Test doubles with deterministic responses
-
-**Orchestration:**
-```
-Request → Cache Check → Circuit Breaker → Ollama → Response Cache → Return
-            ↓ (hit)                         ↓ (success)
-            Return                          Metrics
-```
-
-### Caching Strategy
-
-1. **Input Hashing**: SHA-256 of normalized prompt (ingredients sorted, lowercased)
-2. **TTL**: 7 days for recipe responses
-3. **Storage**: PostgreSQL table `llm_cache`
-4. **Hit Rate**: ~40% in testing (reduces LLM calls significantly)
-
-### Security Model
+#### Security Model
 
 1. **Password Hashing**: BCrypt with cost factor 12
 2. **JWT Tokens**:
-   - Access token: 15-minute expiration
-   - Refresh token: 7-day expiration
-3. **Token Storage**: Client-side (localStorage); server validates signature
-4. **Protected Endpoints**: Spring Security filters reject invalid/expired tokens
+   - Access token: 15-minute expiration, contains userId and email
+   - Refresh token: 7-day expiration, used to obtain new access tokens
+   - Signing algorithm: HS512 with base64-encoded secret
+3. **Token Storage**: Client-side; server validates signature and expiration
+4. **Protected Endpoints**: Spring Security filter chain validates JWT on each request
 
-### Resilience Patterns
-
-- **Circuit Breaker**: Opens after 50% failure rate; prevents cascading failures
-- **Retry**: 3 attempts with exponential backoff for transient errors
-- **Rate Limiting**: 10 requests/min per user (configurable)
-- **Timeouts**: 30s for LLM calls; prevents thread starvation
-
-### Database Schema (Simplified)
+#### Database Schema
 
 ```sql
+-- User accounts
 users (
   id UUID PRIMARY KEY,
   email VARCHAR UNIQUE NOT NULL,
   password_hash VARCHAR NOT NULL,
   name VARCHAR,
-  dietary_preferences TEXT[],
-  created_at TIMESTAMP
+  created_at TIMESTAMP DEFAULT NOW()
 )
 
+-- Generated recipes
 recipes (
   id UUID PRIMARY KEY,
   user_id UUID REFERENCES users(id),
   title VARCHAR NOT NULL,
-  content JSONB,  -- Full recipe data
-  ingredients TEXT[],
+  description TEXT,
+  prep_time INT,
+  cook_time INT,
+  total_time INT,
+  servings INT,
+  difficulty VARCHAR,
+  cuisine VARCHAR,
+  ingredients_used TEXT[],
+  instructions TEXT,  -- JSON string
+  ingredients TEXT,   -- JSON string
+  nutrition_info TEXT, -- JSON string
   tags TEXT[],
   is_saved BOOLEAN DEFAULT false,
-  created_at TIMESTAMP
+  created_at TIMESTAMP DEFAULT NOW()
 )
 
+-- LLM generation audit log
 recipe_generations (
   id UUID PRIMARY KEY,
   user_id UUID REFERENCES users(id),
+  ingredients TEXT[],
+  dietary_preferences TEXT[],
   prompt TEXT,
-  response TEXT,
-  model VARCHAR,
+  raw_response TEXT,
+  model_used VARCHAR,
   tokens_used INT,
   cost_cents INT,
-  latency_ms INT,
-  status VARCHAR,  -- SUCCESS, CACHE_HIT, FAILED
-  created_at TIMESTAMP
+  cached BOOLEAN DEFAULT false,
+  latency_ms BIGINT,
+  status VARCHAR,  -- SUCCESS, FAILED
+  error_message TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
 )
 
+-- Prepared for future caching implementation
 llm_cache (
   id UUID PRIMARY KEY,
   input_hash VARCHAR(64) UNIQUE,
   response TEXT,
   model VARCHAR,
   tokens_used INT,
-  created_at TIMESTAMP,
+  hit_count INT DEFAULT 0,
+  created_at TIMESTAMP DEFAULT NOW(),
   expires_at TIMESTAMP
 )
 ```
+
+### Planned Enhancements
+
+#### Smart Caching Layer
+- **Input Hashing**: SHA-256 of normalized prompt (ingredients sorted, lowercased)
+- **TTL**: Configurable expiration (e.g., 7 days)
+- **Storage**: `llm_cache` table
+- **Hit Rate Tracking**: Monitor cache effectiveness
+
+#### Resilience Patterns
+- **Circuit Breaker**: Fail-fast when Ollama is unavailable
+- **Retry Logic**: Exponential backoff for transient failures
+- **Rate Limiting**: Per-user request throttling
+- **Bulkhead**: Isolate LLM thread pool
+
+#### AWS Integration
+- **S3**: Recipe exports and user-generated content
+- **CloudWatch**: Centralized logging and metrics
+- **Secrets Manager**: Secure credential storage
+- **ECS Fargate**: Containerized deployment
 
 ---
 
 ## 🔧 Development
 
-### Running Tests
+### Running the Application
 
 ```bash
-# Unit tests only
-./mvnw test
+# Start dependencies
+docker-compose up -d
 
-# Integration tests with Testcontainers
-./mvnw verify
+# Run migrations
+./mvnw flyway:migrate
 
-# With coverage report
-./mvnw verify jacoco:report
-# Report: target/site/jacoco/index.html
+# Start Spring Boot
+./mvnw spring-boot:run
 ```
 
-### Code Style
+### Testing
 
-The project uses standard Spring Boot conventions:
-- **Indentation**: 4 spaces
-- **Line length**: 120 characters
-- **Naming**: camelCase for methods, PascalCase for classes
+```bash
+# Run end-to-end test script
+./test-recipe-generation.sh
+
+# Expected output:
+# ✓ Authentication: Working
+# ✓ JWT Protection: Working
+# ✓ AI Recipe Generation: Working
+# ✓ Database Persistence: Working
+```
 
 ### Database Migrations
 
@@ -535,48 +559,38 @@ Flyway manages schema changes via SQL scripts in `src/main/resources/db/migratio
 # View migration history
 ./mvnw flyway:info
 
-# Rollback (manual - create a new migration)
-./mvnw flyway:clean  # WARNING: Drops all tables
+# Clean database (WARNING: Drops all tables)
+./mvnw flyway:clean
 ```
-
-### Adding a New Endpoint
-
-1. **Create DTO** in `dto/`
-2. **Add Service Method** in `service/`
-3. **Create Controller Endpoint** in `controller/`
-4. **Write Tests** in `src/test/`
-5. **Update OpenAPI Docs** (auto-generated from annotations)
 
 ### Environment Variables
 
-| Variable                | Description                        | Default                     |
-|-------------------------|------------------------------------|-----------------------------|
-| `DATABASE_URL`          | PostgreSQL connection string       | `localhost:5432/masterchef` |
-| `JWT_SECRET`            | Secret key for signing JWTs        | (generated)                 |
-| `OLLAMA_BASE_URL`       | Ollama API endpoint                | `http://localhost:11434`    |
-| `AWS_S3_ENDPOINT`       | S3 endpoint (LocalStack/real AWS)  | `http://localhost:4566`     |
-| `SPRING_PROFILES_ACTIVE`| Active Spring profile              | `local`                     |
+| Variable                | Description                        | Default                          |
+|-------------------------|------------------------------------|---------------------------------|
+| `DATABASE_URL`          | PostgreSQL connection string       | `localhost:5432/masterchef`     |
+| `DATABASE_USERNAME`     | Database user                      | `dev`                           |
+| `DATABASE_PASSWORD`     | Database password                  | `dev`                           |
+| `JWT_SECRET`            | Secret key for signing JWTs        | (base64-encoded random string)  |
+| `JWT_ACCESS_EXPIRATION` | Access token expiration (ms)       | `900000` (15 minutes)           |
+| `JWT_REFRESH_EXPIRATION`| Refresh token expiration (ms)      | `604800000` (7 days)            |
+| `OLLAMA_BASE_URL`       | Ollama API endpoint                | `http://localhost:11434`        |
+| `OLLAMA_MODEL`          | Ollama model name                  | `mistral`                       |
+
+These are configured in `application.yml`.
 
 ---
 
 ## 📚 Documentation
 
-- **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** - System design, components, and technical decisions
-- **[SCOPE.md](docs/SCOPE.md)** - Feature scope and requirements
-- **[API.md](docs/API.md)** - Detailed API reference (coming soon)
-- **[Swagger UI](http://localhost:8080/swagger-ui.html)** - Interactive API docs (when running)
+- **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** - Detailed system design and technical decisions
+- **[SCOPE.md](docs/SCOPE.md)** - Feature requirements and project scope
+- **[test-recipe-generation.sh](test-recipe-generation.sh)** - End-to-end test script with examples
 
 ---
 
 ## 🤝 Contributing
 
-This is a personal learning project, but feedback and suggestions are welcome!
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+This is a personal learning project showcasing production-ready engineering practices. Feedback and suggestions are welcome!
 
 ---
 
@@ -586,15 +600,6 @@ This project is licensed under the MIT License - see the [LICENSE](../LICENSE) f
 
 ---
 
-## 🙏 Acknowledgments
-
-- **Spring Boot** team for the excellent framework
-- **Ollama** for making local LLM inference accessible
-- **LocalStack** for AWS emulation
-- **Mistral AI** for the Mistral 7B model
-
----
-
 **Built with ❤️ using Java 21, Spring Boot, and PostgreSQL**
 
-*Designed for AWS. Runs everywhere.*
+*Designed for production. Runs locally for free.*
