@@ -105,3 +105,10 @@ resilience4j:
         limit-for-period: 10
         limit-refresh-period: 1m
         timeout-duration: 0s
+
+# ── JWT Configuration ───────────────────────────────────────────
+jwt:
+  # If you are going to deploy then do not keep this exposed like I have
+  secret: ${JWT_SECRET:Y29tLm1hc3RlcmNoZWYuc2VjcmV0a2V5Zm9yand0dG9rZW5zaW5pbmdwcm9kdWN0aW9uZ3JhZGVhcHBsaWNhdGlvbg==}
+  access-token-expiration-ms: 900000     # 15 minutes
+  refresh-token-expiration-ms: 604800000 # 7 days
