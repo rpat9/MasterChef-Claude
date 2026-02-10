@@ -69,7 +69,7 @@ llm:
     model: mistral
     timeout-seconds: 30
   cache:
-    ttl-hours: 24
+    ttl-days: 7              # SHA-256 content-addressable cache expiration
     max-size: 1000
 
 # ── AWS (LocalStack by default) ────────────────────────────────

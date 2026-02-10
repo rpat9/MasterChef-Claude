@@ -16,7 +16,6 @@ import com.masterchef.masterchef_backend.dto.LlmRequest;
 import com.masterchef.masterchef_backend.dto.LlmResponse;
 import com.masterchef.masterchef_backend.dto.RecipeRequest;
 import com.masterchef.masterchef_backend.dto.RecipeResponse;
-import com.masterchef.masterchef_backend.llm.LlmClient;
 import com.masterchef.masterchef_backend.models.Recipe;
 import com.masterchef.masterchef_backend.models.RecipeGeneration;
 import com.masterchef.masterchef_backend.models.User;
@@ -32,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class RecipeService {
 
-    private final LlmClient llmClient;
+    private final LlmOrchestrator llmOrchestrator;
     private final RecipeRepository recipeRepository;
     private final RecipeGenerationRepository recipeGenerationRepository;
     private final UserRepository userRepository;
@@ -57,15 +56,17 @@ public class RecipeService {
         String prompt = buildPrompt(normalizedIngredients, request);
         log.debug("Generated prompt length: {} characters", prompt.length());
 
-        // Call LLM
+        // Call LLM orchestrator (handles caching automatically)
         long startTime = System.currentTimeMillis();
         LlmRequest llmRequest = LlmRequest.builder()
                 .prompt(prompt)
                 .model("mistral")
                 .temperature(0.7)
+                .userId(userId.toString())
+                .ingredients(normalizedIngredients)
                 .build();
 
-        LlmResponse llmResponse = llmClient.generate(llmRequest);
+        LlmResponse llmResponse = llmOrchestrator.generateWithCache(llmRequest);
         long latencyMs = System.currentTimeMillis() - startTime;
 
         // Save generation audit record
