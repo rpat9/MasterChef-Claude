@@ -286,4 +286,16 @@ public class RecipeService {
                 .build();
     }
 
+    /**
+     * Export recipe as JSON string for S3 storage
+     */
+    public String exportRecipeAsJson(Recipe recipe) {
+        try {
+            return objectMapper.writeValueAsString(recipe);
+        } catch (JsonProcessingException e) {
+            log.error("Failed to serialize recipe to JSON: {}", e.getMessage());
+            throw new RuntimeException("Failed to export recipe", e);
+        }
+    }
+
 }

@@ -40,7 +40,7 @@ management:
         include: health,info,metrics,prometheus
   endpoint:
     health:
-      show-details: when-authorized
+      show-details: always
   metrics:
     tags:
       application: masterchef-backend
@@ -76,6 +76,7 @@ llm:
 aws:
   endpoint: http://localhost:4566
   region: us-east-1
+  use-localstack: true
   s3:
     bucket-name: masterchef-recipes
   cloudwatch:

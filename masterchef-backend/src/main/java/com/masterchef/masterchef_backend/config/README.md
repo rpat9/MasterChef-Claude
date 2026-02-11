@@ -43,6 +43,117 @@ Spring Security configuration with JWT authentication.
 - Signing algorithm: HS512
 - Secret key: Base64-encoded from application.yml
 
+## AwsConfig ✅
+
+AWS SDK v2 client configuration for S3, CloudWatch Logs, and Secrets Manager.
+
+### Implementation
+```java
+@Configuration
+public class AwsConfig {
+    @Bean
+    public S3Client s3Client() { /* LocalStack or production */ }
+    
+    @Bean
+    public CloudWatchLogsClient cloudWatchLogsClient() { /* ... */ }
+    
+    @Bean
+    public SecretsManagerClient secretsManagerClient() { /* ... */ }
+}
+```
+
+### Features
+- **LocalStack Support**: Uses `aws.use-localstack` property to switch between local and production
+- **Conditional Endpoints**: Overrides AWS endpoints for LocalStack (localhost:4566)
+- **Credential Handling**: Dummy credentials for LocalStack, IAM roles for production
+- **Force Path Style**: Enabled for LocalStack S3 compatibility
+
+### Production Pattern
+- ECS task roles provide credentials automatically
+- No API keys in code or environment variables
+- Least-privilege IAM policies
+
+## HealthCheckConfig ✅
+
+Custom health indicators for external service dependencies.
+
+### Implementation
+```java
+@Configuration
+public class HealthCheckConfig {
+    @Bean
+    public HealthIndicator s3HealthIndicator() { /* ... */ }
+    
+    @Bean
+    public HealthIndicator secretsManagerHealthIndicator() { /* ... */ }
+    
+    @Bean
+    public HealthIndicator llmHealthIndicator() { /* ... */ }
+}
+```
+
+### Health Checks
+- **S3**: Verifies bucket accessibility
+- **Secrets Manager**: Tests secret retrieval
+- **LLM (Ollama)**: Checks model availability
+- **PostgreSQL**: Built-in Spring Boot check
+- **Disk Space**: Built-in Spring Boot check
+
+### Endpoint
+`GET /actuator/health` returns:
+```json
+{
+  "status": "UP",
+  "components": {
+    "db": { "status": "UP" },
+    "healthCheckConfig.S3": { "status": "UP" },
+    "healthCheckConfig.SecretsManager": { "status": "UP" },
+    "healthCheckConfig.Llm": { "status": "UP" }
+  }
+}
+```
+
+## Resilience4j Config ✅
+
+Resilience patterns for LLM orchestration.
+
+### Implementation
+Configured via `application.yml`:
+
+```yaml
+resilience4j:
+  circuitbreaker:
+    instances:
+      llm-circuit:
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 60s
+  
+  retry:
+    instances:
+      llm-retry:
+        max-attempts: 3
+        wait-duration: 1s
+  
+  ratelimiter:
+    instances:
+      llm-rate:
+        limit-for-period: 10
+        limit-refresh-period: 1m
+```
+
+### Patterns Applied
+- **Circuit Breaker**: Opens after 50% failure rate, prevents cascading failures
+- **Retry**: 3 attempts with exponential backoff for transient errors
+- **Rate Limiter**: 10 requests per minute per instance
+
+### Usage in LlmOrchestrator
+```java
+@CircuitBreaker(name = "llm-circuit", fallbackMethod = "circuitBreakerFallback")
+@Retry(name = "llm-retry")
+@RateLimiter(name = "llm-rate", fallbackMethod = "rateLimitFallback")
+public LlmResponse generateWithCache(LlmRequest request) { /* ... */ }
+```
+
 ## Future Configs (Planned)
 
 ### Resilience4jConfig

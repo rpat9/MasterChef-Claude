@@ -140,6 +140,48 @@ public class LlmCacheService {
     }
     
     /**
+     * Get total cache entries (including expired)
+     */
+    public long getTotalCacheEntries() {
+        return cacheRepository.count();
+    }
+    
+    /**
+     * Get expired cache entries count
+     */
+    public long getExpiredCacheEntries() {
+        long total = cacheRepository.count();
+        long valid = cacheRepository.countValidEntries(LocalDateTime.now());
+        return total - valid;
+    }
+    
+    /**
+     * Get cache hit count from RecipeGeneration history
+     * This tracks actual cache usage across all recipe generations
+     */
+    public long getCacheHitCount() {
+        // This would need RecipeGenerationRepository - for now return 0
+        // In production, this would query RecipeGeneration.cached = true
+        return 0L;
+    }
+    
+    /**
+     * Get cache miss count
+     */
+    public long getCacheMissCount() {
+        // This would need RecipeGenerationRepository - for now return 0
+        // In production, this would query RecipeGeneration.cached = false
+        return 0L;
+    }
+    
+    /**
+     * Alias for cleanupExpiredEntries for admin controller
+     */
+    public int clearExpiredCache() {
+        return cleanupExpiredEntries();
+    }
+    
+    /**
      * Compute SHA-256 hash of the normalized prompt
      * Normalization ensures cache hits for equivalent inputs:
      * Lowercase prompt

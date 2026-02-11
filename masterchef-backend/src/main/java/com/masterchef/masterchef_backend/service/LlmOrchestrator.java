@@ -8,22 +8,30 @@ import com.masterchef.masterchef_backend.dto.LlmRequest;
 import com.masterchef.masterchef_backend.dto.LlmResponse;
 import com.masterchef.masterchef_backend.llm.LlmClient;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Orchestrates LLM requests with caching and metrics tracking.
+ * Orchestrates LLM requests with caching, resilience patterns, and metrics
+ * 
+ * Resilience patterns applied:
+ * - Circuit Breaker: Fails fast when Ollama is unavailable (50% failure threshold)
+ * - Retry: 3 attempts with exponential backoff for transient failures
+ * - Rate Limiter: 10 requests per minute per user
  * 
  * Request flow:
- * Check cache for matching hash
- * If cache hit: return cached response (< 200ms)
- * If cache miss: call LlmClient
- * Cache successful response
- * Record metrics (latency, cache hit rate, tokens used)
+ * 1. Rate limiter checks quota
+ * 2. Circuit breaker checks if LLM is healthy
+ * 3. Check cache for matching hash
+ * 4. If cache miss: call LLM with retry logic
+ * 5. Cache successful response
+ * 6. Record metrics
  */
-
 @Slf4j
 @Service
 public class LlmOrchestrator {
@@ -56,11 +64,13 @@ public class LlmOrchestrator {
     }
     
     /**
-     * Generate LLM response with cache-aware routing
+     * Generate LLM response with cache-aware routing and resilience patterns
      * 
      * @param request LLM request (contains prompt, model, temperature)
      * @return LLM response (either cached or freshly generated)
      */
+    @RateLimiter(name = "recipe-generation", fallbackMethod = "rateLimitFallback")
+    @CircuitBreaker(name = "llm-circuit", fallbackMethod = "circuitBreakerFallback")
     public LlmResponse generateWithCache(LlmRequest request) {
         long startTime = System.currentTimeMillis();
         
@@ -81,17 +91,23 @@ public class LlmOrchestrator {
             return cachedResponse.get();
         }
         
-        // Step 2: Cache miss - call LLM
+        // Step 2: Cache miss - call LLM with retry
         cacheMissCounter.increment();
         
         log.info("Cache miss: calling LLM client, model={}", request.getModel());
         
         LlmResponse response;
         try {
-            response = llmCallTimer.recordCallable(() -> llmClient.generate(request));
+            response = callLlmWithRetry(request);
         } catch (Exception e) {
-            log.error("LLM call failed: {}", e.getMessage(), e);
-            throw new RuntimeException("LLM generation failed", e);
+            log.error("LLM call failed after retries: {}", e.getMessage(), e);
+            response = LlmResponse.builder()
+                    .model(request.getModel())
+                    .status("ERROR")
+                    .errorMessage("Failed to generate response after retries: " + e.getMessage())
+                    .cached(false)
+                    .latencyMs(System.currentTimeMillis() - startTime)
+                    .build();
         }
         
         // Step 3: Cache successful response
@@ -107,6 +123,44 @@ public class LlmOrchestrator {
                 totalLatency, response.getModel(), false);
         
         return response;
+    }
+    
+    /**
+     * Call LLM with retry logic (separate method for @Retry annotation)
+     */
+    @Retry(name = "llm-retry")
+    private LlmResponse callLlmWithRetry(LlmRequest request) throws Exception {
+        return llmCallTimer.recordCallable(() -> llmClient.generate(request));
+    }
+    
+    /**
+     * Fallback when rate limit is exceeded
+     */
+    private LlmResponse rateLimitFallback(LlmRequest request, Exception e) {
+        log.warn("Rate limit exceeded for request: {}", request.getPrompt().substring(0, 50));
+        
+        return LlmResponse.builder()
+                .model("N/A")
+                .status("RATE_LIMITED")
+                .errorMessage("Too many requests. Please try again later.")
+                .cached(false)
+                .latencyMs(0L)
+                .build();
+    }
+    
+    /**
+     * Fallback when circuit breaker is open (LLM unavailable)
+     */
+    private LlmResponse circuitBreakerFallback(LlmRequest request, Exception e) {
+        log.error("Circuit breaker open - LLM unavailable: {}", e.getMessage());
+        
+        return LlmResponse.builder()
+                .model("N/A")
+                .status("SERVICE_UNAVAILABLE")
+                .errorMessage("Recipe generation service is temporarily unavailable. Please try again in a few minutes.")
+                .cached(false)
+                .latencyMs(0L)
+                .build();
     }
     
     /**

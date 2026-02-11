@@ -4,8 +4,6 @@
 #   LocalStack runs on port 4566 which emulates AWS S3, AWS CloudWatch, AWS Secrets Manager, etc
 #   Lastly we have volumes just so data persists even if we do docker compose down.
 
-version: '3.8'
-
 services:
   # PostgreSQL Database
   postgres:
@@ -45,8 +43,8 @@ services:
     image: localstack/localstack:latest
     container_name: masterchef-localstack
     ports:
-      - "4566:4566"  # LocalStack edge port
-      - "4571:4571"  # LocalStack health check
+      - "4566:4566"
+      - "4571:4571"
     environment:
       - SERVICES=s3,cloudwatch,secretsmanager,iam
       - DEBUG=1
@@ -55,6 +53,7 @@ services:
     volumes:
       - localstack_data:/var/lib/localstack
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./init-localstack.sh:/etc/localstack/init/ready.d/init-aws.sh
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
       interval: 10s

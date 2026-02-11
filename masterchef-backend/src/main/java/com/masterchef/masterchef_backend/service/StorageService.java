@@ -7,6 +7,8 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import jakarta.annotation.PostConstruct;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -46,7 +48,7 @@ public class StorageService {
     @Value("${aws.s3.bucket-name:masterchef-recipes}")
     private String bucketName;
 
-    @Value("${aws.endpoint:http://localhost:4566")
+    @Value("${aws.endpoint:http://localhost:4566}")
     private String awsEndpoint;
 
     @Value("${aws.region:us-east-1}")
@@ -59,6 +61,7 @@ public class StorageService {
      * Initialize S3 Bucket (create if not exists)
      * Called upon application startup
      */
+    @PostConstruct
     public void initializeBucket() {
         try {
             HeadBucketRequest headBucketRequest = HeadBucketRequest.builder().bucket(bucketName).build();
@@ -87,7 +90,7 @@ public class StorageService {
      */
     public String uploadRecipeExport(UUID userId, UUID recipeId, byte[] content, String contentType) {
         String extension = contentType.equals("application/pdf") ? "pdf" : "json";
-        String key = String.format("exports/%s%s.%s", userId, recipeId, extension);
+        String key = String.format("exports/%s/%s.%s", userId, recipeId, extension);
         
         log.info("Uploading to S3: bucket = {}, key={}, size={} bytes", bucketName, key, content.length);
 

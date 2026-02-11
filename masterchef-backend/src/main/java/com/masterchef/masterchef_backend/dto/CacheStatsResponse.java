@@ -1,0 +1,21 @@
+package com.masterchef.masterchef_backend.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class CacheStatsResponse {
+
+    private Long totalEntries;
+    private Long expiredEntries;
+    private Long activeEntries;
+    private Double hitRate;
+    private Long totalHits;
+    private Long totalMisses;
+    
+}
